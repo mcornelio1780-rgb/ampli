@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ampli · Gracias</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20class%3D%22%22%20viewBox%3D%226%200%2088%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20role%3D%22img%22%20aria-label%3D%22Ampli%22%3E%3Cpath%20d%3D%22M35.27%2048.5L64.73%2048.5L64.73%2059.5L35.27%2059.5Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M26.55%2072.5L73.45%2072.5L73.45%2083.5L26.55%2083.5Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M12.00%2096L28.00%2096L52.00%2030L36.00%2030Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M72.00%2096L88.00%2096L64.00%2030L48.00%2030Z%22%20fill%3D%22%231D3FBB%22/%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2213%22%20r%3D%2210%22%20fill%3D%22%23FFC83D%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--cob:#1D3FBB;--sun:#FFC83D;--bg:#F6F7FB;--fg:#14162B;--muted:#4A4F6A;--line:#CCD3EA;--card:#fff;--link:#1D3FBB;--f:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1430;--fg:#F6F7FB;--muted:#AEB6D6;--line:#2A3366;--card:#161C40;--link:#7B93FF;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--f);display:flex;align-items:center;justify-content:center;padding:24px}
+.card{max-width:560px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:34px}
+.sym{width:64px;margin-bottom:18px}
+h1{font:800 clamp(30px,5vw,40px)/1.05 var(--f);letter-spacing:-.02em;margin:0 0 12px}
+ol{padding-left:20px}li{margin:8px 0}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;font:700 15px var(--f);text-decoration:none;border-radius:999px;padding:12px 20px;border:2px solid var(--fg);color:var(--fg);background:transparent;cursor:pointer}
+.btn.pri{background:var(--cob);border-color:var(--cob);color:#fff}
+.small{font-size:13px;color:var(--muted);margin-top:18px}
+select{font:500 14px var(--f);padding:6px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);float:right}
+</style>
+</head>
+<body>
+<main class="card">
+  <select id="lang" aria-label="Language"><option value="es">ES</option><option value="en">EN</option><option value="pt">PT</option><option value="fr">FR</option></select>
+  <div class="sym"><svg class="" viewBox="6 0 88 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ampli"><path d="M37.45 44.5L62.55 44.5L62.55 51.5L37.45 51.5Z" fill="#1D3FBB"/><path d="M31.64 60.5L68.36 60.5L68.36 67.5L31.64 67.5Z" fill="#1D3FBB"/><path d="M25.82 76.5L74.18 76.5L74.18 83.5L25.82 83.5Z" fill="#1D3FBB"/><path d="M13.50 96L26.50 96L50.50 30L37.50 30Z" fill="#1D3FBB"/><path d="M73.50 96L86.50 96L62.50 30L49.50 30Z" fill="#1D3FBB"/><circle cx="50" cy="13" r="10" fill="#FFC83D"/></svg></div>
+  <h1 id="h"></h1>
+  <p id="p"></p>
+  <ol id="steps"></ol>
+  <div class="bar"><button class="btn pri" id="go"></button><a class="btn" href="./" id="home"></a></div>
+  <p class="small" id="s"></p>
+</main>
+<script src="config.js"></script>
+<script src="assets/core.js"></script>
+<script>
+"use strict";
+const A=window.Ampli,CFG=window.AMPLI_CONFIG||{};
+const q=new URLSearchParams(location.search),prod=["kit","cohort","pilot"].includes(q.get("p"))?q.get("p"):"cohort",cid=(q.get("checkout_id")||"").replace(/[^A-Za-z0-9_-]/g,"").slice(0,80);
+const T={
+es:{h:"¡Pago recibido! Te damos la bienvenida a Ampli.",go:"Entrar a Ampli Desk",home:"Volver a la web",s:"Polar te envió el comprobante por correo. ¿Dudas? Escríbenos a {e}{id}.",
+kit:["Tu Kit de Apelaciones IA está listo.","Revisa el correo de Polar: ahí está el enlace de descarga.","Crea tu cuenta en Ampli Desk con el mismo correo de la compra.","Empieza por el código que más te aparece."],
+cohort:["Tu cupo en la cohorte fundadora está reservado.","Revisa el correo de Polar: incluye el enlace del grupo y el calendario de sesiones.","Crea tu cuenta en Ampli Desk con el mismo correo de la compra.","Antes de la primera sesión, haz los 6 casos del modo práctica."],
+pilot:["Tu piloto de recuperación está confirmado.","Te escribiremos en menos de 24 horas para agendar la revisión.","No envíes datos de pacientes por correo: los revisamos juntos de forma segura.","Mientras tanto, prueba Ampli Desk con tu equipo."]},
+en:{h:"Payment received! Welcome to Ampli.",go:"Open Ampli Desk",home:"Back to website",s:"Polar emailed you the receipt. Questions? Write to {e}{id}.",
+kit:["Your AI Appeals Kit is ready.","Check the Polar email: it has the download link.","Create your Ampli Desk account with the same email you used to pay.","Start with the denial code you see most."],
+cohort:["Your founding cohort seat is reserved.","Check the Polar email: it includes the group link and session calendar.","Create your Ampli Desk account with the same email you used to pay.","Before the first session, complete the 6 practice cases."],
+pilot:["Your recovery pilot is confirmed.","We’ll email you within 24 hours to schedule the review.","Don’t email patient data: we’ll review it together securely.","Meanwhile, try Ampli Desk with your team."]},
+pt:{h:"Pagamento recebido! Boas-vindas à Ampli.",go:"Abrir o Ampli Desk",home:"Voltar ao site",s:"A Polar enviou o comprovante por e-mail. Dúvidas? Escreva para {e}{id}.",
+kit:["Seu Kit de Recursos IA está pronto.","Veja o e-mail da Polar: o link de download está lá.","Crie sua conta no Ampli Desk com o mesmo e-mail da compra.","Comece pelo código que mais aparece para você."],
+cohort:["Sua vaga na turma fundadora está reservada.","Veja o e-mail da Polar: inclui o link do grupo e o calendário das aulas.","Crie sua conta no Ampli Desk com o mesmo e-mail da compra.","Antes da primeira aula, faça os 6 casos do modo prática."],
+pilot:["Seu piloto de recuperação está confirmado.","Escreveremos em até 24 horas para agendar a revisão.","Não envie dados de pacientes por e-mail: revisamos juntos com segurança.","Enquanto isso, teste o Ampli Desk com sua equipe."]},
+fr:{h:"Paiement reçu ! Bienvenue chez Ampli.",go:"Ouvrir Ampli Desk",home:"Retour au site",s:"Polar vous a envoyé le reçu par e-mail. Des questions ? Écrivez à {e}{id}.",
+kit:["Votre kit de recours IA est prêt.","Consultez l’e-mail de Polar : le lien de téléchargement s’y trouve.","Créez votre compte Ampli Desk avec l’e-mail utilisé pour payer.","Commencez par le code que vous voyez le plus souvent."],
+cohort:["Votre place dans la promotion fondatrice est réservée.","Consultez l’e-mail de Polar : il contient le lien du groupe et le calendrier.","Créez votre compte Ampli Desk avec l’e-mail utilisé pour payer.","Avant la première session, faites les 6 cas du mode entraînement."],
+pilot:["Votre pilote de récupération est confirmé.","Nous vous écrivons sous 24 heures pour planifier l’analyse.","N’envoyez pas de données de patients par e-mail : nous les examinerons ensemble en toute sécurité.","En attendant, essayez Ampli Desk avec votre équipe."]}};
+let lang=T[A.lang()]?A.lang():"es";
+function render(){const d=T[lang],x=d[prod];document.documentElement.lang=lang;document.getElementById("lang").value=lang;
+  document.getElementById("h").textContent=d.h;document.getElementById("p").textContent=x[0];
+  document.getElementById("steps").innerHTML=x.slice(1).map(s=>`<li>${A.esc(s)}</li>`).join("");
+  document.getElementById("go").textContent=d.go;document.getElementById("home").textContent=d.home;
+  document.getElementById("s").innerHTML=A.esc(d.s).replace("{e}",`<a href="mailto:${A.esc(CFG.contactEmail||"")}">${A.esc(CFG.contactEmail||"")}</a>`).replace("{id}",cid?` · ID ${A.esc(cid)}`:"")}
+document.getElementById("lang").onchange=e=>{lang=e.target.value;A.setLang(lang);render()};
+document.getElementById("go").onclick=()=>{if(A.user()||!A.enabled)location.href="app/";else A.openAuth("signup")};
+A.ready.then(()=>A.track("checkout_success",{product:prod}));
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+rules_version = '2';
+// AMPLI · Reglas de seguridad de Firestore
+// Dónde pegarlo: Consola de Firebase → Firestore Database → pestaña "Reglas" → borrar todo → pegar → Publicar
+// Nadie puede LEER formularios ni eventos desde la web: solo tú, desde la consola.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function s(v, max) { return v is string && v.size() <= max; }
+    function optS(d, k, max) { return !(k in d) || d[k] == null || s(d[k], max); }
+
+    // Formularios de la landing (talento, clínicas, preguntas)
+    match /leads/{id} {
+      allow create: if request.resource.data.consent == true
+        && request.resource.data.kind in ['talent', 'clinic', 'contact', 'newsletter']
+        && s(request.resource.data.email, 254) && request.resource.data.email.matches('.+@.+[.].+')
+        && request.resource.data.status == 'nuevo'
+        && request.resource.data.keys().hasOnly(['kind','name','email','country','english','job','practice','state','denials','message','lang','page','consent','user_agent','user_id','created_at','status'])
+        && optS(request.resource.data, 'name', 200) && optS(request.resource.data, 'message', 3000)
+        && optS(request.resource.data, 'job', 300) && optS(request.resource.data, 'user_agent', 300)
+        && (!('user_id' in request.resource.data) || (request.auth != null && request.resource.data.user_id == request.auth.uid));
+      allow read, update, delete: if false;
+    }
+
+    // Perfil de cada cuenta: cada persona solo ve y edita el suyo
+    match /profiles/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['full_name','role','country','lang','marketing_consent','terms_accepted_at','created_at','practice_name','practice_addr','npi','tin','phone','operator_name'])
+        && (!('role' in request.resource.data) || request.resource.data.role in ['student', 'clinic', 'billing', 'other'])
+        && optS(request.resource.data, 'full_name', 200) && optS(request.resource.data, 'practice_name', 200);
+      allow delete: if false;
+    }
+
+    // Métricas de uso de Ampli Desk (sin datos de pacientes)
+    match /app_events/{id} {
+      allow create: if request.auth != null
+        && request.resource.data.user_id == request.auth.uid
+        && s(request.resource.data.event, 60)
+        && request.resource.data.keys().hasOnly(['user_id', 'event', 'meta', 'created_at']);
+      allow read, update, delete: if false;
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

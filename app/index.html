@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ampli Desk · Apelaciones con IA verificadas</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20class%3D%22%22%20viewBox%3D%226%200%2088%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20role%3D%22img%22%20aria-label%3D%22Ampli%22%3E%3Cpath%20d%3D%22M35.27%2048.5L64.73%2048.5L64.73%2059.5L35.27%2059.5Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M26.55%2072.5L73.45%2072.5L73.45%2083.5L26.55%2083.5Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M12.00%2096L28.00%2096L52.00%2030L36.00%2030Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M72.00%2096L88.00%2096L64.00%2030L48.00%2030Z%22%20fill%3D%22%231D3FBB%22/%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2213%22%20r%3D%2210%22%20fill%3D%22%23FFC83D%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--cob:#1D3FBB;--sun:#FFC83D;--ink:#14162B;--paper:#F6F7FB;--fog:#DDE3F7;--ok:#167A52;--bad:#D7263D;
+--bg:var(--paper);--fg:var(--ink);--muted:#4A4F6A;--line:#CCD3EA;--card:#fff;--field:#fff;--accent:var(--cob);
+--f:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1430;--fg:#F6F7FB;--muted:#AEB6D6;--line:#2A3366;--card:#161C40;--field:#0F1430;--accent:#7B93FF;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1430;--fg:#F6F7FB;--muted:#AEB6D6;--line:#2A3366;--card:#161C40;--field:#0F1430;--accent:#7B93FF;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 15px/1.5 var(--f)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+header{display:flex;align-items:center;gap:16px;padding:12px clamp(14px,3vw,28px);border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+header .logo{width:112px;display:block}
+header .prod{font-weight:700;color:var(--muted);border-left:1px solid var(--line);padding-left:14px}
+header .sp{flex:1}
+select,input,textarea{font:inherit;color:var(--fg);background:var(--field);border:1.5px solid var(--line);border-radius:6px;padding:9px 10px;width:100%}
+textarea{resize:vertical;min-height:120px;line-height:1.5}
+label{display:block;font-weight:600;font-size:13px;margin-bottom:4px}
+.hint{font-size:12px;color:var(--muted);margin-top:3px}
+button{font:600 14px var(--f);border-radius:999px;padding:9px 16px;border:2px solid var(--fg);background:transparent;color:var(--fg);cursor:pointer;white-space:nowrap}
+button.pri{background:var(--cob);border-color:var(--cob);color:#fff}
+button.sm{padding:5px 11px;font-size:13px}
+button:disabled{opacity:.45;cursor:not-allowed}
+nav.tabs{display:flex;gap:4px;padding:10px clamp(14px,3vw,28px) 0;border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs button{border:0;border-radius:8px 8px 0 0;padding:10px 16px;color:var(--muted)}
+nav.tabs button[aria-selected="true"]{background:var(--card);color:var(--fg);box-shadow:inset 0 -3px 0 var(--accent)}
+main{padding:22px clamp(14px,3vw,28px) 60px;max-width:1320px;margin:0 auto}
+.panel{display:none}.panel.on{display:block}
+.cols{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:22px}
+@media(max-width:960px){.cols{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{font:800 22px/1.15 var(--f);margin:0 0 4px}
+.card h3{font:700 16px var(--f);margin:16px 0 8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row1{margin-bottom:10px}
+.phi{background:var(--fog);color:#14162B;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+.codebox{border-left:4px solid var(--accent);padding:8px 12px;margin:10px 0;background:color-mix(in srgb,var(--fog) 35%,transparent);border-radius:0 8px 8px 0}
+.codebox b{display:block}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700}
+.t-appeal{background:var(--cob);color:#fff}.t-corrected{background:var(--sun);color:#14162B}.t-noappeal{background:#4A4F6A;color:#fff}.t-redirect{background:var(--fog);color:#14162B}
+.dl-ok{color:var(--ok);font-weight:700}.dl-warn{color:#B07A00;font-weight:700}.dl-bad{color:var(--bad);font-weight:700}
+.check{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line)}
+.check input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--ok)}
+.prog{height:8px;border-radius:999px;background:var(--fog);overflow:hidden;margin:6px 0 12px}
+.prog i{display:block;height:100%;background:var(--ok);width:0;transition:width .2s}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi b{display:block;font:800 26px var(--f)}.kpi span{font-size:13px;color:var(--muted)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.tbl th{font-size:12px;color:var(--muted);font-weight:700}
+.scroll{overflow-x:auto}
+.empty{padding:36px;text-align:center;color:var(--muted)}
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px}
+.lib .card h3{margin:0 0 6px;display:flex;justify-content:space-between;align-items:center}
+.quiz-opt{display:block;width:100%;text-align:left;border-radius:10px;margin:8px 0;white-space:normal;border-width:1.5px}
+.quiz-opt.right{background:var(--ok);border-color:var(--ok);color:#fff}.quiz-opt.wrong{background:var(--bad);border-color:var(--bad);color:#fff}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast.show{opacity:1}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);max-width:560px;width:92vw}
+dialog::backdrop{background:rgba(15,20,48,.5)}
+@media print{header,nav.tabs,.noprint{display:none!important}body{background:#fff;color:#000}.panel{display:none!important}.panel.print{display:block!important}}
+.who{font-size:13px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.localbar{background:var(--sun);color:#14162B;font-size:13px;font-weight:600;padding:8px clamp(14px,3vw,28px)}
+.sales{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--cob);color:#fff;border-radius:14px;padding:12px 16px;margin-bottom:18px;font-weight:600}
+.sales .sp{flex:1}.sales button{border-color:#fff;color:#fff}.sales button.pri{background:var(--sun);border-color:var(--sun);color:#14162B}
+.sales .x{border:0;font-size:18px;padding:2px 8px}
+.ainote{font-size:12px;color:var(--muted);margin:-4px 0 8px;border-left:3px solid var(--sun);padding-left:8px}
+.foot{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;padding:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.foot a{color:var(--muted)}
+.gate{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+.gate-card{max-width:520px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px}
+.gate h1{font:800 32px/1.05 var(--f);margin:0 0 10px;letter-spacing:-.02em}
+.gate p{margin:0 0 12px}
+.gate-l{padding-left:18px;margin:0 0 8px}.gate-l li{margin:6px 0}
+.gate .bar button{flex:1}
+.gate a{color:var(--accent)}
+#report{display:none}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo"><svg class="" viewBox="29 -950 3304 1140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ampli"><g transform="translate(0,-939.1) scale(9.7826)"><path d="M37.45 44.5L62.55 44.5L62.55 51.5L37.45 51.5Z" fill="#1D3FBB"/><path d="M31.64 60.5L68.36 60.5L68.36 67.5L31.64 67.5Z" fill="#1D3FBB"/><path d="M25.82 76.5L74.18 76.5L74.18 83.5L25.82 83.5Z" fill="#1D3FBB"/><path d="M13.50 96L26.50 96L50.50 30L37.50 30Z" fill="#1D3FBB"/><path d="M73.50 96L86.50 96L62.50 30L49.50 30Z" fill="#1D3FBB"/><circle cx="50" cy="13" r="10" fill="#FFC83D"/></g><g transform="translate(1000,0)"><g transform="scale(1,-1)"><path transform="translate(0,0)" d="M175.50006103515625 -13.83331298828125Q135.3333740234375 -13.83331298828125 99.75009155273438 0.3333740234375Q64.16680908203125 14.50006103515625 41.750213623046875 45.916717529296875Q19.3336181640625 77.3333740234375 19.3336181640625 129.49993896484375Q19.3336181640625 177.49981689453125 37.83355712890625 207.58309936523438Q56.33349609375 237.6663818359375 87.91677856445312 256.0830383300781Q119.50006103515625 274.49969482421875 157.83343505859375 284.1663818359375Q196.16680908203125 293.83306884765625 235.0003662109375 300.83306884765625Q288.16717529296875 310.6663818359375 314.50054931640625 316.5830383300781Q340.83392333984375 322.49969482421875 350.0838928222656 330.7497253417969Q359.3338623046875 338.999755859375 359.3338623046875 353.66650390625Q359.3338623046875 387.6671142578125 335.0835266113281 405.50079345703125Q310.83319091796875 423.33447265625 272.49945068359375 423.33447265625Q248.6658935546875 423.33447265625 224.9990234375 414.50103759765625Q201.3321533203125 405.6676025390625 185.91531372070312 383.9174499511719Q170.49847412109375 362.16729736328125 170.49835205078125 323.00048828125L41.33349609375 333.50054931640625Q40.83367919921875 393.6668701171875 61.583648681640625 433.5833435058594Q82.3336181640625 473.49981689453125 117.41677856445312 496.4164123535156Q152.49993896484375 519.3330078125 194.1663818359375 529.1663208007812Q235.83282470703125 538.9996337890625 277.16595458984375 538.9996337890625Q351.16534423828125 538.9996337890625 400.7485046386719 511.33319091796875Q450.3316650390625 483.666748046875 475.2483825683594 430.7503967285156Q500.16510009765625 377.83404541015625 500.16510009765625 301.16766357421875V206.16754150390625Q500.331787109375 172.000732421875 500.4151306152344 137.33392333984375Q500.49847412109375 102.6671142578125 500.5818176269531 68.41696166992188Q500.6651611328125 34.16680908203125 500.6651611328125 0H374.33349609375Q375.16693115234375 38.3336181640625 375.83367919921875 76.91714477539062Q376.50042724609375 115.50067138671875 377.16717529296875 158.16754150390625H370.6671142578125Q365.83367919921875 110.83392333984375 339.9169616699219 71.75039672851562Q314.000244140625 32.6668701171875 272.0835266113281 9.416778564453125Q230.16680908203125 -13.83331298828125 175.50006103515625 -13.83331298828125ZM231.998779296875 93.49871826171875Q252.49920654296875 93.49871826171875 274.5828552246094 101.58224487304688Q296.66650390625 109.665771484375 315.8333740234375 127.16607666015625Q335.000244140625 144.6663818359375 347.0003662109375 173.41665649414062Q359.00048828125 202.16693115234375 359.3338623046875 242.6671142578125L359.50054931640625 266.333740234375L386.3338623046875 270.667236328125Q377.50042724609375 257.00048828125 357.4169006347656 248.91714477539062Q337.3333740234375 240.83380126953125 312.0830993652344 236.25045776367188Q286.83282470703125 231.6671142578125 261.0825500488281 226.91708374023438Q235.332275390625 222.16705322265625 213.33203125 213.8336181640625Q191.331787109375 205.50018310546875 177.66497802734375 191.33331298828125Q163.9981689453125 177.16644287109375 163.9981689453125 152.332763671875Q163.9981689453125 124.16583251953125 183.24826049804688 108.832275390625Q202.49835205078125 93.49871826171875 231.998779296875 93.49871826171875Z" fill="#1D3FBB"/><path transform="translate(513,0)" d="M38.83367919921875 0V277.3314208984375L38.3336181640625 524.9996337890625H162.33203125L158.6649169921875 302.6654052734375H166.998291015625Q173.998291015625 388.16558837890625 194.58163452148438 439.9158020019531Q215.16497802734375 491.666015625 249.99835205078125 515.3328247070312Q284.83172607421875 538.9996337890625 333.6651611328125 538.9996337890625Q384.3319091796875 538.9996337890625 415.49859619140625 513.5828552246094Q446.665283203125 488.16607666015625 461.16522216796875 435.99920654296875Q475.6651611328125 383.83233642578125 473.49835205078125 302.6654052734375H481.83172607421875Q488.49835205078125 387.16558837890625 510.2483215332031 438.9158020019531Q531.998291015625 490.666015625 568.2483215332031 514.8328247070312Q604.4983520507812 538.9996337890625 654.8318481445312 538.9996337890625Q695.6651611328125 538.9996337890625 725.6651611328125 523.9996337890625Q755.6651611328125 508.9996337890625 776.0818176269531 478.9162902832031Q796.4984741210938 448.83294677734375 806.4984741210938 403.2496032714844Q816.4984741210938 357.666259765625 816.4984741210938 296.49957275390625V0H672.0006103515625V282.666259765625Q672.0006103515625 326.16693115234375 664.7505187988281 354.833984375Q657.5004272460938 383.50103759765625 642.7502136230469 397.4178771972656Q628 411.334716796875 604.9996337890625 411.334716796875Q574.3323974609375 411.334716796875 550.0821228027344 385.167724609375Q525.8318481445312 359.000732421875 511.7484436035156 308.0835876464844Q497.6650390625 257.16644287109375 497.6650390625 181.3326416015625V0H356.6671142578125V287.16632080078125Q356.6671142578125 329.83355712890625 349.33367919921875 357.0839538574219Q342.000244140625 384.3343505859375 326.9167175292969 397.83453369140625Q311.83319091796875 411.334716796875 288.99951171875 411.334716796875Q259.6656494140625 411.334716796875 235.83203125 387.8343505859375Q211.9984130859375 364.333984375 197.58163452148438 313.4168395996094Q183.16485595703125 262.49969482421875 183.16485595703125 181.3326416015625V0Z" fill="#1D3FBB"/><path transform="translate(1343,0)" d="M38.3336181640625 -145.83306884765625 38.6669921875 326.83172607421875 38.3336181640625 524.9996337890625H166.16522216796875L163.33154296875 360.332763671875H170.49822998046875Q181.998291015625 421.3330078125 204.9984130859375 460.99969482421875Q227.99853515625 500.6663818359375 262.9152526855469 519.8330078125Q297.83197021484375 538.9996337890625 345.49847412109375 538.9996337890625Q406.49835205078125 538.9996337890625 450.5817565917969 508.0830383300781Q494.6651611328125 477.16644287109375 518.165283203125 416.16650390625Q541.6654052734375 355.16656494140625 541.6654052734375 264.66650390625Q541.6654052734375 169 515.9987182617188 107.25003051757812Q490.33203125 45.50006103515625 446.16534423828125 15.8333740234375Q401.9986572265625 -13.83331298828125 345.83197021484375 -13.83331298828125Q298.9984130859375 -13.83331298828125 263.5816345214844 6.50018310546875Q228.16485595703125 26.83367919921875 205.41482543945312 67.91720581054688Q182.664794921875 109.000732421875 173.83148193359375 170.0008544921875L164.49810791015625 169.83416748046875Q169.83148193359375 137.0003662109375 173.91482543945312 104.25021362304688Q177.9981689453125 71.50006103515625 180.41482543945312 41.083404541015625Q182.83148193359375 10.666748046875 182.83148193359375 -16.9998779296875V-145.83306884765625ZM293.49969482421875 106.16510009765625Q327.6666259765625 106.16510009765625 350.4169006347656 126.83184814453125Q373.16717529296875 147.49859619140625 384.33404541015625 182.58224487304688Q395.50091552734375 217.6658935546875 395.50091552734375 259.83331298828125Q395.50091552734375 304.00048828125 383.9174499511719 338.9174499511719Q372.333984375 373.83441162109375 349.66705322265625 394.33453369140625Q327.0001220703125 414.83465576171875 293.6663818359375 414.83465576171875Q269.83245849609375 414.83465576171875 249.41549682617188 404.33441162109375Q228.99853515625 393.83416748046875 213.9984130859375 374.167236328125Q198.998291015625 354.50030517578125 190.41494750976562 326.6668701171875Q181.83160400390625 298.83343505859375 181.83160400390625 263.333740234375V256.16693115234375Q181.83160400390625 229.0006103515625 187.49822998046875 206.16717529296875Q193.16485595703125 183.333740234375 203.16485595703125 164.75009155273438Q213.16485595703125 146.16644287109375 227.16497802734375 132.9993896484375Q241.16510009765625 119.83233642578125 257.9154357910156 112.99871826171875Q274.665771484375 106.16510009765625 293.49969482421875 106.16510009765625Z" fill="#1D3FBB"/><path transform="translate(1889,0)" d="M38.6669921875 0V694.9993896484375H182.9981689453125V0Z" fill="#1D3FBB"/><path transform="translate(2091,0)" d="M38.6669921875 0V524.9996337890625H182.9981689453125V0Z" fill="#1D3FBB"/><circle cx="2201.8" cy="645.0" r="90.0" fill="#FFC83D"/></g></g></svg></span><span class="prod">Desk</span>
+  <span class="sp"></span>
+  <select id="lang" aria-label="Idioma" style="width:auto"><option value="es">Español</option><option value="en">English</option><option value="pt">Português</option><option value="fr">Français</option></select>
+  <button class="sm" id="themeBtn" data-i="theme"></button>
+  <span id="who" class="who" hidden></span>
+  <button class="sm" id="outBtn" hidden></button>
+</header>
+<div id="localBar" class="localbar" hidden></div>
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="new" aria-selected="true" data-i="tabNew"></button>
+  <button role="tab" data-tab="queue" data-i="tabQueue"></button>
+  <button role="tab" data-tab="codes" data-i="tabCodes"></button>
+  <button role="tab" data-tab="practice" data-i="tabPractice"></button>
+  <button role="tab" data-tab="settings" data-i="tabSettings"></button>
+</nav>
+<main>
+<!-- NUEVA APELACIÓN -->
+<section class="panel on" id="p-new">
+  <div class="sales noprint" id="sales" hidden><span id="salesTxt"></span><span class="sp"></span><span id="salesBtns"></span><button class="sm x" id="salesX" aria-label="×">×</button></div>
+  <div class="cols">
+    <div class="card">
+      <h2 data-i="newTitle"></h2>
+      <p class="hint" data-i="newSub"></p>
+      <div class="phi" data-i="phi"></div>
+      <div class="row">
+        <div><label for="f-ref" data-i="fRef"></label><input id="f-ref" placeholder="J.R. · INT-0042"></div>
+        <div><label for="f-claim" data-i="fClaim"></label><input id="f-claim" placeholder="2026110400123"></div>
+      </div>
+      <div class="row">
+        <div><label for="f-payer" data-i="fPayer"></label><input id="f-payer" list="payers" placeholder="UnitedHealthcare"></div>
+        <div><label for="f-ptype" data-i="fPtype"></label><select id="f-ptype"><option value="commercial">Commercial</option><option value="medicare">Medicare (Part B)</option><option value="ma">Medicare Advantage</option><option value="medicaid">Medicaid</option><option value="other" data-i="other"></option></select></div>
+      </div>
+      <datalist id="payers"><option>UnitedHealthcare</option><option>Aetna</option><option>Cigna</option><option>Humana</option><option>Blue Cross Blue Shield</option><option>Medicare</option><option>Medicaid</option><option>Ambetter</option><option>Molina</option><option>Oscar</option></datalist>
+      <div class="row">
+        <div><label for="f-code" data-i="fCode"></label><select id="f-code"></select></div>
+        <div><label for="f-rarc" data-i="fRarc"></label><input id="f-rarc" placeholder="N290, M127"></div>
+      </div>
+      <div class="row">
+        <div><label for="f-cpt">CPT / HCPCS</label><input id="f-cpt" placeholder="99214, 20610"></div>
+        <div><label for="f-amt" data-i="fAmt"></label><input id="f-amt" type="number" min="0" step="0.01" placeholder="240.00"></div>
+      </div>
+      <div class="row">
+        <div><label for="f-dos" data-i="fDos"></label><input id="f-dos" type="date"></div>
+        <div><label for="f-den" data-i="fDen"></label><input id="f-den" type="date"></div>
+      </div>
+      <div class="row1"><label for="f-facts" data-i="fFacts"></label><textarea id="f-facts" style="min-height:90px" data-ph="factsPh"></textarea></div>
+      <div class="codebox" id="codeInfo"></div>
+      <div id="deadline" class="hint"></div>
+      <div class="bar"><button class="pri" id="genBtn" data-i="generate"></button><button id="demoBtn" data-i="demo"></button><button id="clearBtn" data-i="clear"></button></div>
+    </div>
+    <div class="card">
+      <h2 data-i="outTitle"></h2>
+      <p class="hint" data-i="outSub"></p>
+      <h3 data-i="letter"></h3>
+      <p class="ainote" data-i="aiDisc"></p>
+      <textarea id="letter" style="min-height:330px;font-family:ui-monospace,Menlo,monospace;font-size:13px"></textarea>
+      <div class="bar"><button class="sm" id="copyLetter" data-i="copy"></button><button class="sm" id="dlLetter" data-i="download"></button><button class="sm" id="copyPrompt" data-i="copyPrompt"></button></div>
+      <h3><span data-i="checklist"></span> <span id="ckCount" class="hint"></span></h3>
+      <div class="prog"><i id="ckBar"></i></div>
+      <div id="checks"></div>
+      <div class="bar"><button class="pri" id="saveBtn" disabled data-i="save"></button></div>
+      <p class="hint" data-i="saveHint"></p>
+    </div>
+  </div>
+</section>
+
+<!-- BANDEJA -->
+<section class="panel" id="p-queue">
+  <div class="kpis" id="kpis"></div>
+  <div class="card">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+      <h2 data-i="queueTitle"></h2>
+      <div class="bar" style="margin:0"><input id="q" style="width:200px" data-ph="search"><button class="sm" id="csvBtn" data-i="exportCsv"></button><input type="file" id="csvIn" accept=".csv" hidden><button class="sm" id="impBtn" data-i="importCsv"></button><button class="sm pri" id="reportBtn" data-i="report"></button></div>
+    </div>
+    <div class="scroll"><table class="tbl" id="tbl"></table></div>
+  </div>
+</section>
+
+<!-- CÓDIGOS -->
+<section class="panel" id="p-codes">
+  <div class="card"><h2 data-i="codesTitle"></h2><p class="hint" data-i="codesSub"></p><input id="cq" data-ph="searchCode" style="max-width:360px"></div>
+  <div class="lib" id="lib"></div>
+</section>
+
+<!-- PRÁCTICA -->
+<section class="panel" id="p-practice">
+  <div class="card" style="max-width:760px">
+    <h2 data-i="practiceTitle"></h2><p class="hint" data-i="practiceSub"></p>
+    <div id="quiz"></div>
+  </div>
+</section>
+
+<!-- AJUSTES -->
+<section class="panel" id="p-settings">
+  <div class="cols">
+    <div class="card">
+      <h2 data-i="setTitle"></h2><p class="hint" data-i="setSub"></p>
+      <div class="row1"><label for="s-clinic" data-i="sClinic"></label><input id="s-clinic" placeholder="Sunrise Family Clinic"></div>
+      <div class="row1"><label for="s-addr" data-i="sAddr"></label><input id="s-addr" placeholder="1200 Main St, Austin, TX 78701"></div>
+      <div class="row"><div><label for="s-npi">NPI</label><input id="s-npi" placeholder="1234567890"></div><div><label for="s-tin">TIN</label><input id="s-tin" placeholder="XX-XXXXXXX"></div></div>
+      <div class="row"><div><label for="s-op" data-i="sOp"></label><input id="s-op" placeholder="Valentina Rojas"></div><div><label for="s-phone" data-i="sPhone"></label><input id="s-phone" placeholder="(512) 555-0100"></div></div>
+      <div class="bar"><button class="pri" id="saveSet" data-i="saveSet"></button></div>
+    </div>
+    <div class="card">
+      <h2 data-i="dataTitle"></h2>
+      <p data-i="dataSub"></p>
+      <div class="bar"><button id="wipe" data-i="wipe"></button></div>
+      <h3 data-i="aboutTitle"></h3>
+      <p class="hint" data-i="about"></p>
+    </div>
+  </div>
+</section>
+<section class="panel print" id="report"></section>
+</main>
+<footer class="foot noprint"><span>© 2026 Limly LLC · Ampli</span><a href="../legal/index.html#terms" data-i="lgTerms"></a><a href="../legal/index.html#privacy" data-i="lgPrivacy"></a><a href="../legal/index.html#ai" data-i="lgAi"></a><a href="../" data-i="lgHome"></a></footer>
+<div id="vgate" class="gate" hidden>
+  <div class="gate-card">
+    <div style="width:64px;margin-bottom:18px"><svg class="" viewBox="6 0 88 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ampli"><path d="M37.45 44.5L62.55 44.5L62.55 51.5L37.45 51.5Z" fill="#1D3FBB"/><path d="M31.64 60.5L68.36 60.5L68.36 67.5L31.64 67.5Z" fill="#1D3FBB"/><path d="M25.82 76.5L74.18 76.5L74.18 83.5L25.82 83.5Z" fill="#1D3FBB"/><path d="M13.50 96L26.50 96L50.50 30L37.50 30Z" fill="#1D3FBB"/><path d="M73.50 96L86.50 96L62.50 30L49.50 30Z" fill="#1D3FBB"/><circle cx="50" cy="13" r="10" fill="#FFC83D"/></svg></div>
+    <h1 data-i="vTitle"></h1>
+    <p id="vText"></p>
+    <div class="bar"><button class="pri" id="vDone" data-i="vDone"></button><button id="vResend" data-i="vResend"></button></div>
+    <p class="hint" id="vMsg" aria-live="polite"></p>
+    <p class="hint"><button class="sm" id="vOut" data-i="vOut"></button></p>
+  </div>
+</div>
+<div id="gate" class="gate" hidden>
+  <div class="gate-card">
+    <div style="width:150px;margin-bottom:22px"><svg class="" viewBox="29 -950 3304 1140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ampli"><g transform="translate(0,-939.1) scale(9.7826)"><path d="M37.45 44.5L62.55 44.5L62.55 51.5L37.45 51.5Z" fill="#1D3FBB"/><path d="M31.64 60.5L68.36 60.5L68.36 67.5L31.64 67.5Z" fill="#1D3FBB"/><path d="M25.82 76.5L74.18 76.5L74.18 83.5L25.82 83.5Z" fill="#1D3FBB"/><path d="M13.50 96L26.50 96L50.50 30L37.50 30Z" fill="#1D3FBB"/><path d="M73.50 96L86.50 96L62.50 30L49.50 30Z" fill="#1D3FBB"/><circle cx="50" cy="13" r="10" fill="#FFC83D"/></g><g transform="translate(1000,0)"><g transform="scale(1,-1)"><path transform="translate(0,0)" d="M175.50006103515625 -13.83331298828125Q135.3333740234375 -13.83331298828125 99.75009155273438 0.3333740234375Q64.16680908203125 14.50006103515625 41.750213623046875 45.916717529296875Q19.3336181640625 77.3333740234375 19.3336181640625 129.49993896484375Q19.3336181640625 177.49981689453125 37.83355712890625 207.58309936523438Q56.33349609375 237.6663818359375 87.91677856445312 256.0830383300781Q119.50006103515625 274.49969482421875 157.83343505859375 284.1663818359375Q196.16680908203125 293.83306884765625 235.0003662109375 300.83306884765625Q288.16717529296875 310.6663818359375 314.50054931640625 316.5830383300781Q340.83392333984375 322.49969482421875 350.0838928222656 330.7497253417969Q359.3338623046875 338.999755859375 359.3338623046875 353.66650390625Q359.3338623046875 387.6671142578125 335.0835266113281 405.50079345703125Q310.83319091796875 423.33447265625 272.49945068359375 423.33447265625Q248.6658935546875 423.33447265625 224.9990234375 414.50103759765625Q201.3321533203125 405.6676025390625 185.91531372070312 383.9174499511719Q170.49847412109375 362.16729736328125 170.49835205078125 323.00048828125L41.33349609375 333.50054931640625Q40.83367919921875 393.6668701171875 61.583648681640625 433.5833435058594Q82.3336181640625 473.49981689453125 117.41677856445312 496.4164123535156Q152.49993896484375 519.3330078125 194.1663818359375 529.1663208007812Q235.83282470703125 538.9996337890625 277.16595458984375 538.9996337890625Q351.16534423828125 538.9996337890625 400.7485046386719 511.33319091796875Q450.3316650390625 483.666748046875 475.2483825683594 430.7503967285156Q500.16510009765625 377.83404541015625 500.16510009765625 301.16766357421875V206.16754150390625Q500.331787109375 172.000732421875 500.4151306152344 137.33392333984375Q500.49847412109375 102.6671142578125 500.5818176269531 68.41696166992188Q500.6651611328125 34.16680908203125 500.6651611328125 0H374.33349609375Q375.16693115234375 38.3336181640625 375.83367919921875 76.91714477539062Q376.50042724609375 115.50067138671875 377.16717529296875 158.16754150390625H370.6671142578125Q365.83367919921875 110.83392333984375 339.9169616699219 71.75039672851562Q314.000244140625 32.6668701171875 272.0835266113281 9.416778564453125Q230.16680908203125 -13.83331298828125 175.50006103515625 -13.83331298828125ZM231.998779296875 93.49871826171875Q252.49920654296875 93.49871826171875 274.5828552246094 101.58224487304688Q296.66650390625 109.665771484375 315.8333740234375 127.16607666015625Q335.000244140625 144.6663818359375 347.0003662109375 173.41665649414062Q359.00048828125 202.16693115234375 359.3338623046875 242.6671142578125L359.50054931640625 266.333740234375L386.3338623046875 270.667236328125Q377.50042724609375 257.00048828125 357.4169006347656 248.91714477539062Q337.3333740234375 240.83380126953125 312.0830993652344 236.25045776367188Q286.83282470703125 231.6671142578125 261.0825500488281 226.91708374023438Q235.332275390625 222.16705322265625 213.33203125 213.8336181640625Q191.331787109375 205.50018310546875 177.66497802734375 191.33331298828125Q163.9981689453125 177.16644287109375 163.9981689453125 152.332763671875Q163.9981689453125 124.16583251953125 183.24826049804688 108.832275390625Q202.49835205078125 93.49871826171875 231.998779296875 93.49871826171875Z" fill="#1D3FBB"/><path transform="translate(513,0)" d="M38.83367919921875 0V277.3314208984375L38.3336181640625 524.9996337890625H162.33203125L158.6649169921875 302.6654052734375H166.998291015625Q173.998291015625 388.16558837890625 194.58163452148438 439.9158020019531Q215.16497802734375 491.666015625 249.99835205078125 515.3328247070312Q284.83172607421875 538.9996337890625 333.6651611328125 538.9996337890625Q384.3319091796875 538.9996337890625 415.49859619140625 513.5828552246094Q446.665283203125 488.16607666015625 461.16522216796875 435.99920654296875Q475.6651611328125 383.83233642578125 473.49835205078125 302.6654052734375H481.83172607421875Q488.49835205078125 387.16558837890625 510.2483215332031 438.9158020019531Q531.998291015625 490.666015625 568.2483215332031 514.8328247070312Q604.4983520507812 538.9996337890625 654.8318481445312 538.9996337890625Q695.6651611328125 538.9996337890625 725.6651611328125 523.9996337890625Q755.6651611328125 508.9996337890625 776.0818176269531 478.9162902832031Q796.4984741210938 448.83294677734375 806.4984741210938 403.2496032714844Q816.4984741210938 357.666259765625 816.4984741210938 296.49957275390625V0H672.0006103515625V282.666259765625Q672.0006103515625 326.16693115234375 664.7505187988281 354.833984375Q657.5004272460938 383.50103759765625 642.7502136230469 397.4178771972656Q628 411.334716796875 604.9996337890625 411.334716796875Q574.3323974609375 411.334716796875 550.0821228027344 385.167724609375Q525.8318481445312 359.000732421875 511.7484436035156 308.0835876464844Q497.6650390625 257.16644287109375 497.6650390625 181.3326416015625V0H356.6671142578125V287.16632080078125Q356.6671142578125 329.83355712890625 349.33367919921875 357.0839538574219Q342.000244140625 384.3343505859375 326.9167175292969 397.83453369140625Q311.83319091796875 411.334716796875 288.99951171875 411.334716796875Q259.6656494140625 411.334716796875 235.83203125 387.8343505859375Q211.9984130859375 364.333984375 197.58163452148438 313.4168395996094Q183.16485595703125 262.49969482421875 183.16485595703125 181.3326416015625V0Z" fill="#1D3FBB"/><path transform="translate(1343,0)" d="M38.3336181640625 -145.83306884765625 38.6669921875 326.83172607421875 38.3336181640625 524.9996337890625H166.16522216796875L163.33154296875 360.332763671875H170.49822998046875Q181.998291015625 421.3330078125 204.9984130859375 460.99969482421875Q227.99853515625 500.6663818359375 262.9152526855469 519.8330078125Q297.83197021484375 538.9996337890625 345.49847412109375 538.9996337890625Q406.49835205078125 538.9996337890625 450.5817565917969 508.0830383300781Q494.6651611328125 477.16644287109375 518.165283203125 416.16650390625Q541.6654052734375 355.16656494140625 541.6654052734375 264.66650390625Q541.6654052734375 169 515.9987182617188 107.25003051757812Q490.33203125 45.50006103515625 446.16534423828125 15.8333740234375Q401.9986572265625 -13.83331298828125 345.83197021484375 -13.83331298828125Q298.9984130859375 -13.83331298828125 263.5816345214844 6.50018310546875Q228.16485595703125 26.83367919921875 205.41482543945312 67.91720581054688Q182.664794921875 109.000732421875 173.83148193359375 170.0008544921875L164.49810791015625 169.83416748046875Q169.83148193359375 137.0003662109375 173.91482543945312 104.25021362304688Q177.9981689453125 71.50006103515625 180.41482543945312 41.083404541015625Q182.83148193359375 10.666748046875 182.83148193359375 -16.9998779296875V-145.83306884765625ZM293.49969482421875 106.16510009765625Q327.6666259765625 106.16510009765625 350.4169006347656 126.83184814453125Q373.16717529296875 147.49859619140625 384.33404541015625 182.58224487304688Q395.50091552734375 217.6658935546875 395.50091552734375 259.83331298828125Q395.50091552734375 304.00048828125 383.9174499511719 338.9174499511719Q372.333984375 373.83441162109375 349.66705322265625 394.33453369140625Q327.0001220703125 414.83465576171875 293.6663818359375 414.83465576171875Q269.83245849609375 414.83465576171875 249.41549682617188 404.33441162109375Q228.99853515625 393.83416748046875 213.9984130859375 374.167236328125Q198.998291015625 354.50030517578125 190.41494750976562 326.6668701171875Q181.83160400390625 298.83343505859375 181.83160400390625 263.333740234375V256.16693115234375Q181.83160400390625 229.0006103515625 187.49822998046875 206.16717529296875Q193.16485595703125 183.333740234375 203.16485595703125 164.75009155273438Q213.16485595703125 146.16644287109375 227.16497802734375 132.9993896484375Q241.16510009765625 119.83233642578125 257.9154357910156 112.99871826171875Q274.665771484375 106.16510009765625 293.49969482421875 106.16510009765625Z" fill="#1D3FBB"/><path transform="translate(1889,0)" d="M38.6669921875 0V694.9993896484375H182.9981689453125V0Z" fill="#1D3FBB"/><path transform="translate(2091,0)" d="M38.6669921875 0V524.9996337890625H182.9981689453125V0Z" fill="#1D3FBB"/><circle cx="2201.8" cy="645.0" r="90.0" fill="#FFC83D"/></g></g></svg></div>
+    <h1 data-i="gateTitle"></h1>
+    <p data-i="gateSub"></p>
+    <ul class="gate-l"><li data-i="gate1"></li><li data-i="gate2"></li><li data-i="gate3"></li></ul>
+    <div class="bar"><button class="pri" id="gSignup" data-i="gateSignup"></button><button id="gLogin" data-i="gateLogin"></button></div>
+    <p class="hint"><a href="../" data-i="lgHome"></a> · <a href="../legal/index.html#privacy" data-i="lgPrivacy"></a></p>
+  </div>
+</div>
+<dialog id="dlg"><form method="dialog"><h2 id="dlgT" style="margin-top:0"></h2><div id="dlgB"></div><div class="bar"><button class="pri" value="ok" data-i="close"></button></div></form></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="../config.js"></script>
+<script src="../assets/core.js"></script>
+<script>
+"use strict";
+const A=window.Ampli,CFG=window.AMPLI_CONFIG||{};
+const I={
+es:{vTitle:"Activa tu cuenta",vText:"Te enviamos un correo a {e}. Abre el enlace para activar tu cuenta y vuelve aquí. Revisa también spam o promociones.",vDone:"Ya la activé",vResend:"Reenviar correo",vNot:"Todavía no aparece activada. Abre el enlace del correo e inténtalo otra vez.",vSent:"Correo reenviado.",vOut:"Usar otra cuenta",aiDisc:"Borrador generado automáticamente con plantillas e IA. Debe verificarlo una persona antes de enviarse.",localMode:"Modo local de prueba: las cuentas no están activadas en este sitio. Tus datos se guardan solo en este navegador.",gateTitle:"Entra a Ampli Desk",gateSub:"Crea tu cuenta gratis para usar la herramienta con la que trabajan nuestros operadores.",gate1:"22 códigos de rechazo explicados en 4 idiomas",gate2:"Cartas de apelación y plazos en segundos",gate3:"Tus reclamos se guardan solo en tu navegador",gateSignup:"Crear cuenta gratis",gateLogin:"Ya tengo cuenta",sbStudent:"¿Quieres dominar el oficio? Cohorte fundadora en vivo, 10 cupos.",sbClinic:"¿Revisamos sus reclamos negados? Piloto de recuperación de hasta 20 reclamos.",sbCohort:"Reservar cupo · $79",sbKit:"Kit · $29",sbPilot:"Pedir piloto · $199",lgTerms:"Términos",lgPrivacy:"Privacidad",lgAi:"Uso de IA y regulación",lgHome:"Volver a la web",theme:"Tema",tabNew:"Nueva apelación",tabQueue:"Bandeja",tabCodes:"Códigos de rechazo",tabPractice:"Práctica",tabSettings:"Ajustes",
+newTitle:"Registrar un reclamo negado",newSub:"Copia los datos de la EOB o ERA. Ampli Desk te dice qué significa el código, qué hacer, cuánto plazo queda y te arma la carta.",
+phi:"🔒 No escribas nombres de pacientes ni datos clínicos identificables. Usa iniciales o un ID interno. Todo se guarda solo en este navegador.",
+fRef:"Referencia del paciente (iniciales o ID)",fClaim:"N.º de reclamo",fPayer:"Aseguradora",fPtype:"Tipo de plan",other:"Otro",fCode:"Código de rechazo (CARC)",fRarc:"Códigos RARC (opcional)",fAmt:"Monto facturado (USD)",fDos:"Fecha de servicio",fDen:"Fecha del rechazo",fFacts:"Hechos que respaldan la apelación",factsPh:"Ej.: autorización A12345 obtenida el 02/10; nota clínica documenta dolor de rodilla de 6 semanas que no mejoró con terapia física.",
+generate:"Generar carta y checklist",demo:"Cargar ejemplo",clear:"Limpiar",outTitle:"Carta y verificación",outSub:"La IA y las plantillas proponen; tú verificas. No se guarda sin completar el checklist.",letter:"Carta de apelación (en inglés, para la aseguradora)",copy:"Copiar carta",download:"Descargar .txt",copyPrompt:"Copiar prompt para Claude/ChatGPT",checklist:"Checklist de verificación humana",save:"Guardar en la bandeja",saveHint:"El botón se activa cuando marcas todos los puntos del checklist.",
+queueTitle:"Bandeja de apelaciones",search:"Buscar…",exportCsv:"Exportar CSV",importCsv:"Importar CSV",report:"Reporte de auditoría",
+kTotal:"Reclamos en bandeja",kStake:"Monto en juego",kWon:"Recuperado",kRate:"Tasa de éxito",kDue:"Vencen en ≤7 días",
+hRef:"Ref.",hPayer:"Aseguradora",hCode:"Código",hAmt:"Monto",hDl:"Plazo",hStatus:"Estado",hAct:"Acción",
+st:{new:"Nuevo",review:"En revisión",sent:"Apelación enviada",won:"Ganada",lost:"Perdida",billed:"Facturado al paciente"},
+empty:"Todavía no hay reclamos. Registra el primero en “Nueva apelación” o carga el ejemplo.",del:"Borrar",open:"Abrir",
+codesTitle:"Biblioteca de códigos de rechazo",codesSub:"Los 22 códigos CARC más frecuentes en consultorios pequeños, con qué significan y qué hacer.",searchCode:"Busca por código o palabra…",
+types:{appeal:"Apelar",corrected:"Reclamo corregido",noappeal:"No se apela",redirect:"Enviar a otro pagador"},
+practiceTitle:"Modo práctica",practiceSub:"Casos reales anonimizados para entrenar el criterio del operador. Es el mismo banco que usa la cohorte.",next:"Siguiente caso",score:"Puntaje",restart:"Reiniciar",
+setTitle:"Datos de la clínica y del operador",setSub:"Se usan para completar la carta. Se guardan solo en este navegador.",sClinic:"Nombre de la clínica",sAddr:"Dirección",sOp:"Operador",sPhone:"Teléfono",saveSet:"Guardar ajustes",
+dataTitle:"Tus datos",dataSub:"Ampli Desk funciona sin internet y sin servidor. Para mover tu trabajo a otra computadora, exporta el CSV desde la bandeja.",wipe:"Borrar todos los datos",aboutTitle:"Sobre los plazos",
+about:"Plazos por defecto: Medicare redeterminación 120 días desde el aviso inicial. Comercial y Medicare Advantage: 180 días, aunque varía según contrato. Medicaid: 60 días, varía por estado. Verifica siempre el plazo del contrato y del manual del pagador.",
+close:"Cerrar",copied:"Copiado",saved:"Guardado en la bandeja",fill:"Elige un código de rechazo para generar la carta.",dlLeft:"Quedan {d} días para apelar (vence {date}).",dlGone:"El plazo venció hace {d} días. Revisa si hay excepción o causa justificada.",dlNone:"Ingresa la fecha del rechazo para calcular el plazo.",
+confirmWipe:"¿Borrar todos los reclamos y ajustes de este navegador? No se puede deshacer.",imported:"Importados: {n}",settingsSaved:"Ajustes guardados",reportTitle:"Reporte de recuperación de reclamos negados",
+ck:["Los datos del reclamo (ID de miembro, n.º de reclamo, CPT, fecha de servicio) coinciden con la EOB.","El código de rechazo y los RARC están leídos e interpretados correctamente.","La acción elegida (apelar, corregir o redirigir) corresponde al código.","Cada afirmación de la carta está respaldada por un documento adjunto.","La carta no contiene datos clínicos inventados ni suposiciones de la IA.","El plazo de apelación está vigente según el contrato o el manual del pagador.","Los adjuntos están listos: nota clínica, EOB y lo que pide el código.","La carta se enviará por el canal oficial del pagador (portal, fax o correo)."]},
+en:{vTitle:"Activate your account",vText:"We sent an email to {e}. Open the link to activate your account, then come back. Check spam or promotions too.",vDone:"I’ve activated it",vResend:"Resend email",vNot:"It doesn’t show as activated yet. Open the email link and try again.",vSent:"Email resent.",vOut:"Use another account",aiDisc:"Draft generated automatically with templates and AI. A person must verify it before it is sent.",localMode:"Local test mode: accounts aren’t enabled on this site. Your data stays in this browser only.",gateTitle:"Sign in to Ampli Desk",gateSub:"Create a free account to use the same tool our operators work with.",gate1:"22 denial codes explained in 4 languages",gate2:"Appeal letters and deadlines in seconds",gate3:"Your claims stay in your browser only",gateSignup:"Create free account",gateLogin:"I have an account",sbStudent:"Want to master the craft? Live founding cohort, 10 seats.",sbClinic:"Want us to review your denied claims? Recovery pilot for up to 20 claims.",sbCohort:"Reserve a seat · $79",sbKit:"Kit · $29",sbPilot:"Request pilot · $199",lgTerms:"Terms",lgPrivacy:"Privacy",lgAi:"AI use & regulation",lgHome:"Back to website",theme:"Theme",tabNew:"New appeal",tabQueue:"Queue",tabCodes:"Denial codes",tabPractice:"Practice",tabSettings:"Settings",
+newTitle:"Log a denied claim",newSub:"Copy the data from the EOB or ERA. Ampli Desk explains the code, the next action and the deadline, and drafts the letter.",
+phi:"🔒 Don’t enter patient names or identifiable clinical details. Use initials or an internal ID. Everything stays in this browser.",
+fRef:"Patient reference (initials or ID)",fClaim:"Claim #",fPayer:"Payer",fPtype:"Plan type",other:"Other",fCode:"Denial code (CARC)",fRarc:"RARC codes (optional)",fAmt:"Billed amount (USD)",fDos:"Date of service",fDen:"Denial date",fFacts:"Facts supporting the appeal",factsPh:"E.g.: authorization A12345 obtained on 10/02; clinical note documents 6 weeks of knee pain not improved with physical therapy.",
+generate:"Generate letter and checklist",demo:"Load example",clear:"Clear",outTitle:"Letter and verification",outSub:"AI and templates propose; you verify. Nothing is saved until the checklist is complete.",letter:"Appeal letter (English, for the payer)",copy:"Copy letter",download:"Download .txt",copyPrompt:"Copy prompt for Claude/ChatGPT",checklist:"Human verification checklist",save:"Save to queue",saveHint:"The button unlocks once every checklist item is ticked.",
+queueTitle:"Appeals queue",search:"Search…",exportCsv:"Export CSV",importCsv:"Import CSV",report:"Audit report",
+kTotal:"Claims in queue",kStake:"Amount at stake",kWon:"Recovered",kRate:"Win rate",kDue:"Due in ≤7 days",
+hRef:"Ref.",hPayer:"Payer",hCode:"Code",hAmt:"Amount",hDl:"Deadline",hStatus:"Status",hAct:"Action",
+st:{new:"New",review:"In review",sent:"Appeal sent",won:"Won",lost:"Lost",billed:"Billed to patient"},
+empty:"No claims yet. Log the first one in “New appeal” or load the example.",del:"Delete",open:"Open",
+codesTitle:"Denial code library",codesSub:"The 22 CARC codes small practices see most, what they mean and what to do.",searchCode:"Search by code or keyword…",
+types:{appeal:"Appeal",corrected:"Corrected claim",noappeal:"Not appealable",redirect:"Send to other payer"},
+practiceTitle:"Practice mode",practiceSub:"Anonymized real-world cases to train operator judgment. Same bank used in the cohort.",next:"Next case",score:"Score",restart:"Restart",
+setTitle:"Practice and operator details",setSub:"Used to fill in the letter. Stored only in this browser.",sClinic:"Practice name",sAddr:"Address",sOp:"Operator",sPhone:"Phone",saveSet:"Save settings",
+dataTitle:"Your data",dataSub:"Ampli Desk works offline with no server. To move your work to another computer, export the CSV from the queue.",wipe:"Delete all data",aboutTitle:"About deadlines",
+about:"Default deadlines: Medicare redetermination 120 days from the initial notice. Commercial and Medicare Advantage 180 days (varies by contract). Medicaid 60 days (varies by state). Always confirm against the contract and the payer manual.",
+close:"Close",copied:"Copied",saved:"Saved to queue",fill:"Pick a denial code to generate the letter.",dlLeft:"{d} days left to appeal (due {date}).",dlGone:"Deadline passed {d} days ago. Check for good-cause exceptions.",dlNone:"Enter the denial date to calculate the deadline.",
+confirmWipe:"Delete every claim and setting in this browser? This can’t be undone.",imported:"Imported: {n}",settingsSaved:"Settings saved",reportTitle:"Denied claims recovery report",
+ck:["Claim data (member ID, claim #, CPT, date of service) matches the EOB.","Denial code and RARCs are read and interpreted correctly.","The chosen action (appeal, correct or redirect) fits the code.","Every statement in the letter is backed by an attached document.","The letter contains no invented clinical facts or AI assumptions.","The appeal deadline is still open per contract or payer manual.","Attachments are ready: clinical note, EOB and anything the code requires.","The letter will go through the payer’s official channel (portal, fax or mail)."]},
+pt:{vTitle:"Ative sua conta",vText:"Enviamos um e-mail para {e}. Abra o link para ativar sua conta e volte aqui. Veja também spam ou promoções.",vDone:"Já ativei",vResend:"Reenviar e-mail",vNot:"Ainda não aparece ativada. Abra o link do e-mail e tente de novo.",vSent:"E-mail reenviado.",vOut:"Usar outra conta",aiDisc:"Rascunho gerado automaticamente com modelos e IA. Uma pessoa deve verificá-lo antes do envio.",localMode:"Modo local de teste: as contas não estão ativadas neste site. Seus dados ficam só neste navegador.",gateTitle:"Entre no Ampli Desk",gateSub:"Crie sua conta grátis para usar a ferramenta dos nossos operadores.",gate1:"22 códigos de negativa explicados em 4 idiomas",gate2:"Cartas de recurso e prazos em segundos",gate3:"Seus reembolsos ficam só no seu navegador",gateSignup:"Criar conta grátis",gateLogin:"Já tenho conta",sbStudent:"Quer dominar o ofício? Turma fundadora ao vivo, 10 vagas.",sbClinic:"Quer que revisemos seus reembolsos negados? Piloto de até 20 reembolsos.",sbCohort:"Reservar vaga · $79",sbKit:"Kit · $29",sbPilot:"Pedir piloto · $199",lgTerms:"Termos",lgPrivacy:"Privacidade",lgAi:"Uso de IA e regulação",lgHome:"Voltar ao site",theme:"Tema",tabNew:"Novo recurso",tabQueue:"Fila",tabCodes:"Códigos de negativa",tabPractice:"Prática",tabSettings:"Ajustes",
+newTitle:"Registrar um reembolso negado",newSub:"Copie os dados da EOB ou ERA. O Ampli Desk explica o código, a próxima ação e o prazo, e monta a carta.",
+phi:"🔒 Não digite nomes de pacientes nem dados clínicos identificáveis. Use iniciais ou um ID interno. Tudo fica só neste navegador.",
+fRef:"Referência do paciente (iniciais ou ID)",fClaim:"N.º do reembolso",fPayer:"Seguradora",fPtype:"Tipo de plano",other:"Outro",fCode:"Código de negativa (CARC)",fRarc:"Códigos RARC (opcional)",fAmt:"Valor faturado (USD)",fDos:"Data do serviço",fDen:"Data da negativa",fFacts:"Fatos que sustentam o recurso",factsPh:"Ex.: autorização A12345 obtida em 02/10; a nota clínica documenta dor no joelho há 6 semanas sem melhora com fisioterapia.",
+generate:"Gerar carta e checklist",demo:"Carregar exemplo",clear:"Limpar",outTitle:"Carta e verificação",outSub:"A IA e os modelos propõem; você verifica. Nada é salvo sem completar o checklist.",letter:"Carta de recurso (em inglês, para a seguradora)",copy:"Copiar carta",download:"Baixar .txt",copyPrompt:"Copiar prompt para Claude/ChatGPT",checklist:"Checklist de verificação humana",save:"Salvar na fila",saveHint:"O botão é liberado quando todos os itens do checklist estão marcados.",
+queueTitle:"Fila de recursos",search:"Buscar…",exportCsv:"Exportar CSV",importCsv:"Importar CSV",report:"Relatório de auditoria",
+kTotal:"Reembolsos na fila",kStake:"Valor em jogo",kWon:"Recuperado",kRate:"Taxa de sucesso",kDue:"Vencem em ≤7 dias",
+hRef:"Ref.",hPayer:"Seguradora",hCode:"Código",hAmt:"Valor",hDl:"Prazo",hStatus:"Status",hAct:"Ação",
+st:{new:"Novo",review:"Em revisão",sent:"Recurso enviado",won:"Ganho",lost:"Perdido",billed:"Cobrado do paciente"},
+empty:"Ainda não há reembolsos. Registre o primeiro em “Novo recurso” ou carregue o exemplo.",del:"Apagar",open:"Abrir",
+codesTitle:"Biblioteca de códigos de negativa",codesSub:"Os 22 códigos CARC mais comuns em consultórios pequenos, o que significam e o que fazer.",searchCode:"Busque por código ou palavra…",
+types:{appeal:"Recorrer",corrected:"Reembolso corrigido",noappeal:"Não se recorre",redirect:"Enviar a outro pagador"},
+practiceTitle:"Modo prática",practiceSub:"Casos reais anonimizados para treinar o critério do operador. Mesmo banco usado na turma.",next:"Próximo caso",score:"Pontuação",restart:"Reiniciar",
+setTitle:"Dados da clínica e do operador",setSub:"Usados para completar a carta. Ficam só neste navegador.",sClinic:"Nome da clínica",sAddr:"Endereço",sOp:"Operador",sPhone:"Telefone",saveSet:"Salvar ajustes",
+dataTitle:"Seus dados",dataSub:"O Ampli Desk funciona sem internet e sem servidor. Para levar seu trabalho a outro computador, exporte o CSV da fila.",wipe:"Apagar todos os dados",aboutTitle:"Sobre os prazos",
+about:"Prazos padrão: Medicare redeterminação 120 dias desde o aviso inicial. Comercial e Medicare Advantage 180 dias (varia por contrato). Medicaid 60 dias (varia por estado). Confirme sempre no contrato e no manual do pagador.",
+close:"Fechar",copied:"Copiado",saved:"Salvo na fila",fill:"Escolha um código de negativa para gerar a carta.",dlLeft:"Restam {d} dias para recorrer (vence em {date}).",dlGone:"O prazo venceu há {d} dias. Verifique se há exceção por justa causa.",dlNone:"Informe a data da negativa para calcular o prazo.",
+confirmWipe:"Apagar todos os reembolsos e ajustes deste navegador? Não dá para desfazer.",imported:"Importados: {n}",settingsSaved:"Ajustes salvos",reportTitle:"Relatório de recuperação de reembolsos negados",
+ck:["Os dados (ID do membro, n.º do reembolso, CPT, data do serviço) batem com a EOB.","O código de negativa e os RARC foram lidos e interpretados corretamente.","A ação escolhida (recorrer, corrigir ou redirecionar) corresponde ao código.","Cada afirmação da carta tem um documento anexo que a sustenta.","A carta não contém fatos clínicos inventados nem suposições da IA.","O prazo de recurso está vigente segundo o contrato ou o manual do pagador.","Os anexos estão prontos: nota clínica, EOB e o que o código exige.","A carta será enviada pelo canal oficial do pagador (portal, fax ou correio)."]},
+fr:{vTitle:"Activez votre compte",vText:"Nous avons envoyé un e-mail à {e}. Ouvrez le lien pour activer votre compte, puis revenez ici. Vérifiez aussi les spams.",vDone:"Je l’ai activé",vResend:"Renvoyer l’e-mail",vNot:"Le compte n’apparaît pas encore activé. Ouvrez le lien de l’e-mail et réessayez.",vSent:"E-mail renvoyé.",vOut:"Utiliser un autre compte",aiDisc:"Brouillon généré automatiquement avec des modèles et l’IA. Une personne doit le vérifier avant l’envoi.",localMode:"Mode local de test : les comptes ne sont pas activés sur ce site. Vos données restent dans ce navigateur.",gateTitle:"Connectez-vous à Ampli Desk",gateSub:"Créez un compte gratuit pour utiliser l’outil de nos opérateurs.",gate1:"22 codes de refus expliqués en 4 langues",gate2:"Lettres de recours et délais en quelques secondes",gate3:"Vos demandes restent dans votre navigateur",gateSignup:"Créer un compte gratuit",gateLogin:"J’ai déjà un compte",sbStudent:"Envie de maîtriser le métier ? Promotion fondatrice en direct, 10 places.",sbClinic:"On analyse vos refus ? Pilote de récupération jusqu’à 20 demandes.",sbCohort:"Réserver · 79 $",sbKit:"Kit · 29 $",sbPilot:"Demander le pilote · 199 $",lgTerms:"Conditions",lgPrivacy:"Confidentialité",lgAi:"Usage de l’IA et réglementation",lgHome:"Retour au site",theme:"Thème",tabNew:"Nouveau recours",tabQueue:"File",tabCodes:"Codes de refus",tabPractice:"Entraînement",tabSettings:"Réglages",
+newTitle:"Enregistrer une demande refusée",newSub:"Copiez les données de l’EOB ou de l’ERA. Ampli Desk explique le code, l’action à mener et le délai, puis rédige la lettre.",
+phi:"🔒 N’indiquez ni nom de patient ni donnée clinique identifiable. Utilisez des initiales ou un ID interne. Tout reste dans ce navigateur.",
+fRef:"Référence patient (initiales ou ID)",fClaim:"N° de demande",fPayer:"Assureur",fPtype:"Type de plan",other:"Autre",fCode:"Code de refus (CARC)",fRarc:"Codes RARC (facultatif)",fAmt:"Montant facturé (USD)",fDos:"Date de l’acte",fDen:"Date du refus",fFacts:"Faits qui appuient le recours",factsPh:"Ex. : autorisation A12345 obtenue le 02/10 ; la note clinique documente 6 semaines de douleur au genou sans amélioration par kinésithérapie.",
+generate:"Générer la lettre et la checklist",demo:"Charger un exemple",clear:"Effacer",outTitle:"Lettre et vérification",outSub:"L’IA et les modèles proposent ; vous vérifiez. Rien n’est enregistré sans checklist complète.",letter:"Lettre de recours (en anglais, pour l’assureur)",copy:"Copier la lettre",download:"Télécharger .txt",copyPrompt:"Copier le prompt pour Claude/ChatGPT",checklist:"Checklist de vérification humaine",save:"Enregistrer dans la file",saveHint:"Le bouton s’active quand tous les points sont cochés.",
+queueTitle:"File de recours",search:"Rechercher…",exportCsv:"Exporter CSV",importCsv:"Importer CSV",report:"Rapport d’audit",
+kTotal:"Demandes en file",kStake:"Montant en jeu",kWon:"Récupéré",kRate:"Taux de succès",kDue:"Échéance ≤7 jours",
+hRef:"Réf.",hPayer:"Assureur",hCode:"Code",hAmt:"Montant",hDl:"Délai",hStatus:"Statut",hAct:"Action",
+st:{new:"Nouveau",review:"En revue",sent:"Recours envoyé",won:"Gagné",lost:"Perdu",billed:"Facturé au patient"},
+empty:"Aucune demande pour l’instant. Enregistrez la première dans « Nouveau recours » ou chargez l’exemple.",del:"Supprimer",open:"Ouvrir",
+codesTitle:"Bibliothèque des codes de refus",codesSub:"Les 22 codes CARC les plus fréquents dans les petits cabinets, leur sens et quoi faire.",searchCode:"Rechercher par code ou mot…",
+types:{appeal:"Faire un recours",corrected:"Demande corrigée",noappeal:"Pas de recours",redirect:"Envoyer à un autre payeur"},
+practiceTitle:"Mode entraînement",practiceSub:"Cas réels anonymisés pour entraîner le jugement de l’opérateur. Même banque que la promotion.",next:"Cas suivant",score:"Score",restart:"Recommencer",
+setTitle:"Cabinet et opérateur",setSub:"Utilisés pour compléter la lettre. Stockés uniquement dans ce navigateur.",sClinic:"Nom du cabinet",sAddr:"Adresse",sOp:"Opérateur",sPhone:"Téléphone",saveSet:"Enregistrer",
+dataTitle:"Vos données",dataSub:"Ampli Desk fonctionne hors ligne, sans serveur. Pour changer d’ordinateur, exportez le CSV depuis la file.",wipe:"Supprimer toutes les données",aboutTitle:"À propos des délais",
+about:"Délais par défaut : Medicare, redétermination sous 120 jours après l’avis initial. Commercial et Medicare Advantage 180 jours (selon contrat). Medicaid 60 jours (selon l’État). Vérifiez toujours le contrat et le manuel du payeur.",
+close:"Fermer",copied:"Copié",saved:"Enregistré dans la file",fill:"Choisissez un code de refus pour générer la lettre.",dlLeft:"Il reste {d} jours pour le recours (échéance {date}).",dlGone:"Délai dépassé depuis {d} jours. Vérifiez les exceptions pour motif légitime.",dlNone:"Saisissez la date du refus pour calculer le délai.",
+confirmWipe:"Supprimer toutes les demandes et réglages de ce navigateur ? Action irréversible.",imported:"Importés : {n}",settingsSaved:"Réglages enregistrés",reportTitle:"Rapport de récupération des demandes refusées",
+ck:["Les données (ID membre, n° de demande, CPT, date de l’acte) correspondent à l’EOB.","Le code de refus et les RARC sont lus et interprétés correctement.","L’action choisie (recours, correction ou réorientation) correspond au code.","Chaque affirmation de la lettre est appuyée par une pièce jointe.","La lettre ne contient aucun fait clinique inventé ni supposition de l’IA.","Le délai de recours est encore ouvert selon le contrat ou le manuel du payeur.","Les pièces jointes sont prêtes : note clinique, EOB et ce que le code exige.","La lettre partira par le canal officiel du payeur (portail, fax ou courrier)."]}
+};
+// [code, tipo, categoría-carta, significado{es,en,pt,fr}, acción{es,en,pt,fr}]
+const C=[
+["CO-4","corrected","modifier",["El código de procedimiento no coincide con el modificador, o falta un modificador requerido.","The procedure code is inconsistent with the modifier, or a required modifier is missing.","O código do procedimento não corresponde ao modificador, ou falta um modificador obrigatório.","Le code d’acte ne correspond pas au modificateur, ou un modificateur requis manque."],["Compara el modificador con la nota clínica, corrígelo y reenvía como reclamo corregido.","Check the modifier against the clinical note, fix it and resubmit as a corrected claim.","Confira o modificador com a nota clínica, corrija e reenvie como reembolso corrigido.","Comparez le modificateur à la note clinique, corrigez et renvoyez une demande corrigée."]],
+["CO-11","appeal","dx",["El diagnóstico no es consistente con el procedimiento.","The diagnosis is inconsistent with the procedure.","O diagnóstico não é consistente com o procedimento.","Le diagnostic n’est pas cohérent avec l’acte."],["Verifica que el ICD-10 documentado respalde el CPT. Si el código estaba mal, corrige; si estaba bien, apela con la nota clínica.","Confirm the documented ICD-10 supports the CPT. Fix it if it was wrong; if it was right, appeal with the clinical note.","Confirme que o CID-10 documentado sustenta o CPT. Se estava errado, corrija; se estava certo, recorra com a nota clínica.","Vérifiez que la CIM-10 documentée justifie le CPT. Corrigez si erreur ; sinon, faites un recours avec la note clinique."]],
+["CO-16","corrected","info",["Al reclamo le falta información o tiene errores de facturación.","The claim lacks information or has submission/billing errors.","Falta informação no reembolso ou há erros de faturamento.","La demande manque d’informations ou contient des erreurs de facturation."],["Lee el RARC que acompaña (por ejemplo N290 o MA130): dice exactamente qué falta. Completa y reenvía.","Read the accompanying RARC (e.g. N290, MA130): it says exactly what is missing. Complete and resubmit.","Leia o RARC que acompanha (ex.: N290, MA130): ele diz exatamente o que falta. Complete e reenvie.","Lisez le RARC associé (ex. N290, MA130) : il indique ce qui manque. Complétez et renvoyez."]],
+["CO-18","appeal","duplicate",["Reclamo o servicio duplicado.","Exact duplicate claim or service.","Reembolso ou serviço duplicado.","Demande ou acte en double."],["Confirma si de verdad es un duplicado. Si fueron servicios distintos, apela con el modificador correcto (76, 77, 59) y la documentación.","Confirm whether it truly is a duplicate. If services were distinct, appeal with the right modifier (76, 77, 59) and documentation.","Confirme se é mesmo duplicado. Se foram serviços distintos, recorra com o modificador correto (76, 77, 59) e a documentação.","Vérifiez s’il s’agit vraiment d’un doublon. Si les actes sont distincts, recours avec le bon modificateur (76, 77, 59) et les pièces."]],
+["CO-22","corrected","cob",["El servicio puede estar cubierto por otro seguro (coordinación de beneficios).","This care may be covered by another payer per coordination of benefits.","O serviço pode estar coberto por outro seguro (coordenação de benefícios).","L’acte peut être couvert par un autre payeur (coordination des prestations)."],["Verifica cuál es el seguro primario. Envía la EOB del primario o pide al paciente que actualice su COB con la aseguradora.","Confirm which plan is primary. Send the primary EOB or ask the patient to update COB with the payer.","Verifique qual é o seguro primário. Envie a EOB do primário ou peça ao paciente para atualizar a COB.","Identifiez l’assureur principal. Envoyez son EOB ou demandez au patient de mettre à jour la COB."]],
+["CO-27","appeal","eligibility",["Gastos incurridos después de que terminó la cobertura.","Expenses incurred after coverage terminated.","Despesas após o término da cobertura.","Frais engagés après la fin de la couverture."],["Verifica elegibilidad en la fecha de servicio. Si había cobertura, apela con la prueba; si no, factura al paciente o al nuevo seguro.","Check eligibility on the date of service. If covered, appeal with proof; if not, bill the patient or the new plan.","Verifique a elegibilidade na data do serviço. Se havia cobertura, recorra com a prova; se não, cobre o paciente ou o novo plano.","Vérifiez l’éligibilité à la date de l’acte. Si couvert, recours avec preuve ; sinon, facturez le patient ou le nouveau plan."]],
+["CO-29","appeal","timely",["Venció el plazo para presentar el reclamo.","The time limit for filing has expired.","O prazo para apresentar o reembolso venceu.","Le délai de dépôt de la demande est dépassé."],["Busca la prueba de envío a tiempo (reporte de aceptación del clearinghouse o carta de rechazo previa) y apela con ella.","Find proof of timely filing (clearinghouse acceptance report or earlier rejection letter) and appeal with it.","Busque a prova de envio no prazo (relatório de aceitação do clearinghouse) e recorra com ela.","Trouvez la preuve de dépôt dans les délais (rapport d’acceptation du clearinghouse) et faites un recours."]],
+["CO-31","corrected","eligibility",["No se puede identificar al paciente como asegurado.","Patient cannot be identified as our insured.","Não é possível identificar o paciente como segurado.","Le patient n’est pas identifié comme assuré."],["Compara nombre, fecha de nacimiento e ID de miembro con la tarjeta del seguro. Corrige y reenvía.","Compare name, date of birth and member ID against the insurance card. Fix and resubmit.","Compare nome, data de nascimento e ID do membro com a carteirinha. Corrija e reenvie.","Comparez nom, date de naissance et ID membre avec la carte d’assurance. Corrigez et renvoyez."]],
+["CO-45","noappeal","generic",["El cargo supera la tarifa contratada: es un ajuste contractual.","Charge exceeds fee schedule / maximum allowable: contractual adjustment.","O valor excede a tabela contratada: é um ajuste contratual.","Le montant dépasse le barème contractuel : ajustement contractuel."],["Normalmente no se apela. Solo si pagaron menos de lo contratado, apela con el anexo de tarifas.","Usually not appealable. Only if paid below contract, appeal with the fee schedule.","Normalmente não se recorre. Só se pagaram menos que o contrato, recorra com a tabela.","En général pas de recours. Seulement si le paiement est inférieur au contrat, avec le barème."]],
+["CO-50","appeal","necessity",["No se considera médicamente necesario.","Not deemed a medical necessity by the payer.","Não considerado clinicamente necessário.","Non jugé médicalement nécessaire."],["Apela con notas clínicas, historia de tratamientos previos y la política de cobertura (LCD/NCD o la del pagador) que respalda el servicio.","Appeal with clinical notes, prior treatment history and the coverage policy (LCD/NCD or payer policy) that supports the service.","Recorra com notas clínicas, histórico de tratamentos e a política de cobertura (LCD/NCD ou do pagador).","Recours avec notes cliniques, historique des traitements et la politique de couverture (LCD/NCD ou du payeur)."]],
+["CO-96","appeal","noncovered",["Cargo no cubierto por el plan.","Non-covered charge(s).","Cobrança não coberta pelo plano.","Frais non couverts par le plan."],["Confirma beneficios. Si el servicio sí es cubierto o tenía autorización, apela; si no, revisa si hay un ABN o renuncia firmada para cobrar al paciente.","Verify benefits. If covered or authorized, appeal; if not, check for a signed ABN/waiver to bill the patient.","Confirme os benefícios. Se coberto ou autorizado, recorra; se não, veja se há ABN/termo assinado para cobrar o paciente.","Vérifiez les garanties. Si couvert ou autorisé, recours ; sinon, vérifiez un ABN signé pour facturer le patient."]],
+["CO-97","appeal","bundling",["El servicio está incluido en el pago de otro servicio (agrupado).","Benefit included in payment for another service already adjudicated (bundled).","O serviço está incluído no pagamento de outro (agrupado).","L’acte est inclus dans le paiement d’un autre acte (regroupé)."],["Si fue un servicio separado e independiente, apela o corrige con modificador 25 o 59 y la documentación que lo demuestre.","If it was a separate, distinct service, appeal or correct with modifier 25 or 59 and supporting documentation.","Se foi um serviço separado e distinto, recorra ou corrija com modificador 25 ou 59 e a documentação.","S’il s’agit d’un acte distinct, recours ou correction avec modificateur 25 ou 59 et pièces justificatives."]],
+["CO-109","redirect","generic",["Este pagador no cubre el reclamo; debe enviarse a otro pagador.","Claim not covered by this payer; send to the correct payer.","Este pagador não cobre; envie ao pagador correto.","Ce payeur ne couvre pas la demande ; envoyez au bon payeur."],["Identifica el pagador correcto (MAC, plan Medicare Advantage, Medicaid estatal) y reenvía allí.","Identify the correct payer (MAC, Medicare Advantage plan, state Medicaid) and resubmit there.","Identifique o pagador correto (MAC, Medicare Advantage, Medicaid) e reenvie.","Identifiez le bon payeur (MAC, Medicare Advantage, Medicaid) et renvoyez."]],
+["CO-151","appeal","frequency",["La información no respalda esta cantidad o frecuencia de servicios.","Information does not support this many or this frequency of services.","As informações não sustentam essa quantidade ou frequência de serviços.","Les informations ne justifient pas ce nombre ou cette fréquence d’actes."],["Apela con la documentación que justifica cada unidad o visita: notas, plan de tratamiento, evolución.","Appeal with documentation justifying each unit or visit: notes, plan of care, progress.","Recorra com documentação que justifique cada unidade ou visita: notas, plano de tratamento.","Recours avec les pièces justifiant chaque unité ou visite : notes, plan de soins."]],
+["CO-167","corrected","dx",["El diagnóstico no está cubierto.","The diagnosis is not covered.","O diagnóstico não está coberto.","Le diagnostic n’est pas couvert."],["Revisa la especificidad del ICD-10. Si hay un código más preciso, documentado y cubierto, corrige; si no, apela con la política.","Check ICD-10 specificity. If a more precise, documented, covered code exists, correct; otherwise appeal with the policy.","Revise a especificidade do CID-10. Se houver código mais preciso e documentado, corrija; se não, recorra.","Vérifiez la précision de la CIM-10. Code plus précis documenté : corrigez ; sinon recours avec la politique."]],
+["CO-170","appeal","provider",["Pago negado cuando el servicio lo realiza o factura este tipo de proveedor.","Payment denied when performed/billed by this type of provider.","Pagamento negado quando realizado/faturado por este tipo de prestador.","Paiement refusé pour ce type de prestataire."],["Revisa la especialidad y taxonomía registradas y el credencialamiento; apela con la prueba de que el proveedor está habilitado.","Check registered specialty/taxonomy and credentialing; appeal with proof the provider is eligible.","Revise especialidade, taxonomia e credenciamento; recorra com a prova de habilitação.","Vérifiez spécialité, taxonomie et accréditation ; recours avec la preuve d’habilitation."]],
+["CO-181","corrected","info",["El código de procedimiento no era válido en la fecha de servicio.","Procedure code was invalid on the date of service.","O código do procedimento era inválido na data do serviço.","Le code d’acte n’était pas valide à la date de l’acte."],["Usa el código vigente en la fecha de servicio y reenvía como reclamo corregido.","Use the code valid on the date of service and resubmit as a corrected claim.","Use o código vigente na data e reenvie como reembolso corrigido.","Utilisez le code valide à la date de l’acte et renvoyez une demande corrigée."]],
+["CO-197","appeal","auth",["Faltó la autorización previa, precertificación o notificación.","Precertification/authorization/notification absent.","Faltou autorização prévia, pré-certificação ou notificação.","Autorisation préalable ou notification absente."],["Busca el número de autorización. Si existe, apela con él. Si fue urgencia, apela con la documentación; si no, pide autorización retroactiva.","Find the authorization number. If it exists, appeal with it. If urgent care, appeal with documentation; otherwise request retro-authorization.","Busque o número da autorização. Se existir, recorra com ele. Se foi urgência, recorra com documentação; se não, peça autorização retroativa.","Retrouvez le numéro d’autorisation. S’il existe, recours avec. Urgence : recours avec pièces ; sinon demandez une autorisation rétroactive."]],
+["CO-236","appeal","bundling",["La combinación de procedimientos no es compatible el mismo día (edits NCCI).","Procedure combination not compatible on the same day (NCCI edits).","Combinação de procedimentos incompatível no mesmo dia (NCCI).","Combinaison d’actes incompatible le même jour (NCCI)."],["Revisa la tabla NCCI. Si el edit permite modificador, agrega 59/XS/XU con documentación y apela.","Check the NCCI table. If the edit allows a modifier, add 59/XS/XU with documentation and appeal.","Confira a tabela NCCI. Se permitir modificador, use 59/XS/XU com documentação e recorra.","Consultez la table NCCI. Si un modificateur est permis, ajoutez 59/XS/XU avec pièces et faites un recours."]],
+["CO-B7","appeal","provider",["El proveedor no estaba certificado o habilitado para este procedimiento en esa fecha.","Provider not certified/eligible to be paid for this procedure on this date.","O prestador não estava habilitado para este procedimento na data.","Le prestataire n’était pas habilité pour cet acte à cette date."],["Verifica fechas de credencialamiento o enrolamiento; apela con la carta de aprobación o solicita enrolamiento retroactivo.","Check credentialing/enrollment dates; appeal with the approval letter or request retroactive enrollment.","Verifique datas de credenciamento; recorra com a carta de aprovação ou peça credenciamento retroativo.","Vérifiez les dates d’accréditation ; recours avec la lettre d’approbation ou demande rétroactive."]],
+["PR-1","noappeal","generic",["Deducible: responsabilidad del paciente.","Deductible amount: patient responsibility.","Franquia: responsabilidade do paciente.","Franchise : à la charge du patient."],["No se apela. Factura el monto al paciente.","Not appealable. Bill the amount to the patient.","Não se recorre. Cobre o valor do paciente.","Pas de recours. Facturez le patient."]],
+["PR-2","noappeal","generic",["Coaseguro: responsabilidad del paciente.","Coinsurance amount: patient responsibility.","Cosseguro: responsabilidade do paciente.","Coassurance : à la charge du patient."],["No se apela. Factura el monto al paciente.","Not appealable. Bill the amount to the patient.","Não se recorre. Cobre o valor do paciente.","Pas de recours. Facturez le patient."]]
+];
+const LI={es:0,en:1,pt:2,fr:3};
+const BODY={
+necessity:"We respectfully request reconsideration of the denial for lack of medical necessity. The enclosed clinical documentation shows that the service was reasonable and necessary for this patient's condition and consistent with the applicable coverage policy.",
+auth:"This claim was denied for missing authorization. Authorization was obtained or the service met the payer's criteria for urgent or retroactive authorization, as documented in the enclosed records.",
+timely:"This claim was denied for untimely filing. The enclosed clearinghouse acceptance report demonstrates that the original claim was submitted within the payer's filing limit.",
+duplicate:"This claim was denied as a duplicate. The services billed were distinct and separately performed, as reflected by the modifier and the enclosed documentation.",
+cob:"This claim was denied for coordination of benefits. Enclosed is the primary payer's explanation of benefits and/or updated coverage information.",
+eligibility:"This claim was denied for eligibility. The enclosed verification shows the patient had active coverage with your plan on the date of service.",
+info:"We are submitting a corrected claim with the missing or invalid information completed, as identified in the remittance advice.",
+modifier:"We are submitting a corrected claim with the appropriate modifier, supported by the enclosed clinical documentation.",
+dx:"The diagnosis reported supports the procedure performed, as documented in the enclosed clinical note.",
+bundling:"The service was separate and distinct from the other service billed on the same date and is supported by the appropriate modifier and documentation enclosed.",
+frequency:"The enclosed documentation supports the number and frequency of services billed, consistent with the patient's plan of care.",
+noncovered:"We request reconsideration because the service is a covered benefit under the member's plan, as supported by the enclosed documentation.",
+provider:"The rendering provider was properly credentialed and eligible to perform and bill this service on the date of service, as shown in the enclosed documentation.",
+generic:"We respectfully request reconsideration of this claim based on the enclosed documentation."};
+const ENCL={necessity:["Clinical/progress notes","Prior treatment history","Applicable coverage policy (LCD/NCD or payer policy)"],auth:["Authorization number/approval","Clinical notes"],timely:["Clearinghouse acceptance report","Original submission record"],duplicate:["Clinical notes for each service","Corrected claim with modifier"],cob:["Primary payer EOB","Updated COB information"],eligibility:["Eligibility verification on DOS","Copy of insurance card"],info:["Corrected claim (frequency code 7)"],modifier:["Corrected claim","Clinical notes"],dx:["Clinical note supporting the diagnosis"],bundling:["Clinical notes documenting the separate service"],frequency:["Plan of care","Progress notes"],noncovered:["Benefit verification","Clinical notes"],provider:["Credentialing/enrollment approval"],generic:["Supporting documentation"]};
+const PRACT=[
+{q:["EOB: CO-197 en una resonancia de rodilla. En el sistema de agenda encuentras la autorización A55120 aprobada antes de la cita. ¿Qué haces?","EOB: CO-197 on a knee MRI. In the scheduling system you find authorization A55120 approved before the visit. What do you do?","EOB: CO-197 numa ressonância de joelho. No sistema de agenda você acha a autorização A55120 aprovada antes da consulta. O que faz?","EOB : CO-197 sur une IRM du genou. Dans l’agenda, vous trouvez l’autorisation A55120 approuvée avant le rendez-vous. Que faites-vous ?"],o:[["Apelar adjuntando el número de autorización","Appeal with the authorization number","Recorrer anexando o número da autorização","Recours avec le numéro d’autorisation"],["Facturar al paciente","Bill the patient","Cobrar o paciente","Facturer le patient"],["Dar de baja el monto","Write it off","Dar baixa no valor","Passer en perte"]],a:0,e:["La autorización existía: el rechazo es un error del pagador y se gana con la prueba.","The authorization existed: the denial is a payer error and the proof wins it.","A autorização existia: a negativa é erro do pagador e se ganha com a prova.","L’autorisation existait : le refus est une erreur du payeur et la preuve suffit."]},
+{q:["EOB: PR-1 por $180 en una consulta. ¿Qué haces?","EOB: PR-1 for $180 on an office visit. What do you do?","EOB: PR-1 de US$180 numa consulta. O que faz?","EOB : PR-1 de 180 $ sur une consultation. Que faites-vous ?"],o:[["Apelar","Appeal","Recorrer","Faire un recours"],["Facturar el deducible al paciente","Bill the deductible to the patient","Cobrar a franquia do paciente","Facturer la franchise au patient"],["Reenviar el reclamo","Resubmit the claim","Reenviar o reembolso","Renvoyer la demande"]],a:1,e:["PR-1 es deducible: el plan funcionó como debía. Corresponde cobrar al paciente.","PR-1 is the deductible: the plan worked as designed. Bill the patient.","PR-1 é franquia: o plano funcionou como deveria. Cobre o paciente.","PR-1 est la franchise : le plan a fonctionné normalement. Facturez le patient."]},
+{q:["EOB: CO-29. El reporte del clearinghouse muestra que el reclamo fue aceptado 40 días después del servicio y el límite del contrato es 90 días. ¿Qué haces?","EOB: CO-29. The clearinghouse report shows the claim was accepted 40 days after service; the contract limit is 90 days. What do you do?","EOB: CO-29. O relatório do clearinghouse mostra aceite 40 dias após o serviço; o limite do contrato é 90 dias. O que faz?","EOB : CO-29. Le rapport du clearinghouse montre une acceptation 40 jours après l’acte ; la limite est de 90 jours. Que faites-vous ?"],o:[["Dar de baja: venció el plazo","Write off: deadline passed","Dar baixa: prazo vencido","Passer en perte : délai dépassé"],["Reenviar el mismo reclamo","Resubmit the same claim","Reenviar o mesmo reembolso","Renvoyer la même demande"],["Apelar con el reporte de aceptación como prueba","Appeal with the acceptance report as proof","Recorrer com o relatório de aceite como prova","Recours avec le rapport d’acceptation comme preuve"]],a:2,e:["Se envió dentro del plazo. La prueba de envío a tiempo es lo que gana esta apelación.","It was filed on time. Proof of timely filing wins this appeal.","Foi enviado no prazo. A prova de envio no prazo ganha este recurso.","La demande a été déposée à temps. La preuve de dépôt gagne ce recours."]},
+{q:["EOB: CO-97 en una consulta 99213 el mismo día de una infiltración. La nota documenta un problema distinto, evaluado por separado. ¿Qué haces?","EOB: CO-97 on a 99213 visit the same day as an injection. The note documents a separate problem, evaluated separately. What do you do?","EOB: CO-97 numa consulta 99213 no mesmo dia de uma infiltração. A nota documenta um problema diferente. O que faz?","EOB : CO-97 sur une consultation 99213 le jour d’une infiltration. La note documente un problème distinct. Que faites-vous ?"],o:[["Corregir/apelar con modificador 25 y la nota","Correct/appeal with modifier 25 and the note","Corrigir/recorrer com modificador 25 e a nota","Corriger/recours avec modificateur 25 et la note"],["Facturar al paciente","Bill the patient","Cobrar o paciente","Facturer le patient"],["Dar de baja","Write it off","Dar baixa","Passer en perte"]],a:0,e:["Una evaluación separada y documentada justifica el modificador 25.","A separate, documented evaluation justifies modifier 25.","Uma avaliação separada e documentada justifica o modificador 25.","Une évaluation distincte et documentée justifie le modificateur 25."]},
+{q:["EOB de Medicare: CO-109. El paciente tiene un plan Medicare Advantage. ¿Qué haces?","Medicare EOB: CO-109. The patient has a Medicare Advantage plan. What do you do?","EOB do Medicare: CO-109. O paciente tem um plano Medicare Advantage. O que faz?","EOB Medicare : CO-109. Le patient a un plan Medicare Advantage. Que faites-vous ?"],o:[["Apelar ante Medicare","Appeal to Medicare","Recorrer ao Medicare","Recours auprès de Medicare"],["Reenviar el reclamo al plan Medicare Advantage","Resubmit to the Medicare Advantage plan","Reenviar ao plano Medicare Advantage","Renvoyer au plan Medicare Advantage"],["Facturar al paciente","Bill the patient","Cobrar o paciente","Facturer le patient"]],a:1,e:["CO-109 significa pagador equivocado. Con Medicare Advantage, el pagador es el plan privado.","CO-109 means wrong payer. With Medicare Advantage, the private plan pays.","CO-109 significa pagador errado. Com Medicare Advantage, quem paga é o plano privado.","CO-109 signifie mauvais payeur. Avec Medicare Advantage, c’est le plan privé qui paie."]},
+{q:["EOB: CO-45 por $60 y el pago coincide con la tarifa del contrato. ¿Qué haces?","EOB: CO-45 for $60 and payment matches the contract rate. What do you do?","EOB: CO-45 de US$60 e o pagamento bate com a tabela do contrato. O que faz?","EOB : CO-45 de 60 $ et le paiement correspond au barème. Que faites-vous ?"],o:[["Apelar","Appeal","Recorrer","Faire un recours"],["Cobrar los $60 al paciente","Bill the $60 to the patient","Cobrar US$60 do paciente","Facturer 60 $ au patient"],["Registrar el ajuste contractual; no se apela","Post the contractual adjustment; no appeal","Lançar o ajuste contratual; não se recorre","Enregistrer l’ajustement contractuel ; pas de recours"]],a:2,e:["Es un ajuste por contrato: no se apela y tampoco se puede cobrar al paciente.","It’s a contractual adjustment: no appeal, and it can’t be billed to the patient.","É ajuste contratual: não se recorre e não pode ser cobrado do paciente.","C’est un ajustement contractuel : pas de recours, et non facturable au patient."]}];
+// ---------- estado ----------
+const K0="ampli_desk_v1";let K=K0;
+const store={get(){try{return JSON.parse(localStorage.getItem(K))||{}}catch(e){return {}}},set(v){try{localStorage.setItem(K,JSON.stringify(v))}catch(e){}}};
+let S={lang:I[A.lang()]?A.lang():"es",claims:[],settings:{}};
+const $=id=>document.getElementById(id);
+const t=k=>I[S.lang][k];
+const fmt=n=>"$"+(Number(n)||0).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:2});
+const toast=m=>{const e=$("toast");e.textContent=m;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1500)};
+const copy=v=>{(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast(t("copied"))).catch(()=>{const a=document.createElement("textarea");a.value=v;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();toast(t("copied"))})};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const codeOf=c=>C.find(x=>x[0]===c);
+const DAYS={medicare:120,ma:180,commercial:180,medicaid:60,other:90};
+function deadline(den,ptype){if(!den)return null;const d=new Date(den+"T12:00:00");d.setDate(d.getDate()+(DAYS[ptype]||90));const left=Math.ceil((d-new Date())/864e5);return{date:d.toISOString().slice(0,10),left}}
+// ---------- i18n ----------
+function applyLang(){
+  document.documentElement.lang=S.lang;$("lang").value=S.lang;
+  document.querySelectorAll("[data-i]").forEach(e=>{const v=t(e.dataset.i);if(typeof v==="string")e.textContent=v});
+  document.querySelectorAll("[data-ph]").forEach(e=>e.placeholder=t(e.dataset.ph));
+  const sel=$("f-code"),cur=sel.value;
+  sel.innerHTML=`<option value="">—</option>`+C.map(c=>`<option value="${c[0]}">${c[0]} · ${esc(c[3][LI[S.lang]].slice(0,48))}${c[3][LI[S.lang]].length>48?"…":""}</option>`).join("");
+  sel.value=cur;renderCodeInfo();renderChecks();renderQueue();renderLib();renderQuiz();
+}
+// ---------- nueva apelación ----------
+function form(){return{ref:$("f-ref").value.trim(),claim:$("f-claim").value.trim(),payer:$("f-payer").value.trim(),ptype:$("f-ptype").value,code:$("f-code").value,rarc:$("f-rarc").value.trim(),cpt:$("f-cpt").value.trim(),amt:parseFloat($("f-amt").value)||0,dos:$("f-dos").value,den:$("f-den").value,facts:$("f-facts").value.trim()}}
+function renderCodeInfo(){
+  const f=form(),c=codeOf(f.code),box=$("codeInfo");
+  if(!c){box.innerHTML=`<span class="hint">${esc(t("fill"))}</span>`}
+  else box.innerHTML=`<b>${c[0]} <span class="tag t-${c[1]}">${esc(t("types")[c[1]])}</span></b><div>${esc(c[3][LI[S.lang]])}</div><div style="margin-top:6px"><b style="display:inline">→</b> ${esc(c[4][LI[S.lang]])}</div>`;
+  const d=deadline(f.den,f.ptype),dl=$("deadline");
+  if(!d)dl.textContent=t("dlNone");
+  else if(d.left>=0){dl.innerHTML=`<span class="${d.left<=7?"dl-bad":d.left<=30?"dl-warn":"dl-ok"}">${esc(t("dlLeft").replace("{d}",d.left).replace("{date}",d.date))}</span>`}
+  else dl.innerHTML=`<span class="dl-bad">${esc(t("dlGone").replace("{d}",-d.left))}</span>`;
+}
+function buildLetter(f){
+  const c=codeOf(f.code);if(!c)return"";const st=S.settings||{};const today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+  const cat=c[2],isCorr=c[1]==="corrected";
+  const lines=[st.clinic||"[Practice name]",st.addr||"[Practice address]",`NPI: ${st.npi||"[NPI]"} | TIN: ${st.tin||"[TIN]"}`,st.phone?`Phone: ${st.phone}`:"","",today,"",`${f.payer||"[Payer]"} — Provider Appeals / Reconsideration Department`,"",
+  `RE: ${isCorr?"Corrected Claim Submission":"Request for Reconsideration (Level 1 Provider Appeal)"}`,
+  `Patient: [Full name — complete in your HIPAA-compliant system] (internal ref: ${f.ref||"—"})`,`Member ID: [Member ID]`,`Claim number: ${f.claim||"[Claim #]"}`,`Date of service: ${f.dos||"[DOS]"}`,`CPT/HCPCS: ${f.cpt||"[CPT]"}`,`Billed amount: ${f.amt?fmt(f.amt):"[Amount]"}`,`Denial: ${c[0]}${f.rarc?" / RARC "+f.rarc:""} — ${c[3][1]}`,"","To Whom It May Concern:","",BODY[cat]||BODY.generic];
+  if(f.facts)lines.push("","Supporting facts:",...f.facts.split(/\n+/).map(x=>"- "+x.trim()).filter(x=>x.length>2));
+  lines.push("","Based on the information above and the enclosed documentation, we request that this claim be reprocessed for payment.","","Enclosures:",...(ENCL[cat]||ENCL.generic).map(x=>"- "+x),"- Copy of the EOB/remittance advice","","Sincerely,","",st.op||"[Operator name]",`Revenue Cycle Operator, on behalf of ${st.clinic||"[Practice name]"}`);
+  return lines.filter((x,i,a)=>!(x===""&&a[i-1]==="")).join("\n");
+}
+function buildPrompt(f){const c=codeOf(f.code);if(!c)return"";
+return `You are an experienced US medical billing appeals specialist. Improve the appeal letter below.
+Rules: do not invent clinical facts, dates or authorization numbers; keep placeholders in [brackets]; keep it under 300 words; formal tone; list any information I must verify before sending.
+Context (de-identified): payer type ${f.ptype}; payer ${f.payer||"unknown"}; denial ${c[0]} (${c[3][1]})${f.rarc?"; RARC "+f.rarc:""}; CPT ${f.cpt||"n/a"}; billed ${f.amt?fmt(f.amt):"n/a"}.
+Recommended action: ${c[4][1]}
+Facts I can document: ${f.facts||"none provided"}
+
+LETTER:
+${$("letter").value}`}
+function renderChecks(){
+  const box=$("checks"),prev=[...box.querySelectorAll("input")].map(x=>x.checked);
+  box.innerHTML=t("ck").map((x,i)=>`<label class="check"><input type="checkbox" ${prev[i]?"checked":""}><span>${esc(x)}</span></label>`).join("");
+  box.querySelectorAll("input").forEach(x=>x.addEventListener("change",updChecks));updChecks();
+}
+function updChecks(){const all=[...$("checks").querySelectorAll("input")],n=all.filter(x=>x.checked).length;
+  $("ckCount").textContent=`${n}/${all.length}`;$("ckBar").style.width=(n/all.length*100)+"%";$("saveBtn").disabled=!(n===all.length&&$("letter").value.trim()&&form().code)}
+// ---------- bandeja ----------
+function renderQueue(){
+  const q=($("q").value||"").toLowerCase(),L=S.claims;
+  const won=L.filter(c=>c.status==="won"),closed=L.filter(c=>["won","lost"].includes(c.status));
+  const due=L.filter(c=>{const d=deadline(c.den,c.ptype);return d&&d.left>=0&&d.left<=7&&!["won","lost","billed","sent"].includes(c.status)});
+  $("kpis").innerHTML=[[L.length,t("kTotal")],[fmt(L.filter(c=>!["won","lost","billed"].includes(c.status)).reduce((s,c)=>s+c.amt,0)),t("kStake")],[fmt(won.reduce((s,c)=>s+c.amt,0)),t("kWon")],[closed.length?Math.round(won.length/closed.length*100)+"%":"—",t("kRate")],[due.length,t("kDue")]].map(k=>`<div class="kpi"><b>${k[0]}</b><span>${esc(k[1])}</span></div>`).join("");
+  const rows=L.filter(c=>!q||JSON.stringify(c).toLowerCase().includes(q));
+  if(!rows.length){$("tbl").innerHTML=`<tr><td class="empty">${esc(t("empty"))}</td></tr>`;return}
+  const st=t("st");
+  $("tbl").innerHTML=`<tr><th>${t("hRef")}</th><th>${t("hPayer")}</th><th>${t("hCode")}</th><th>${t("hAmt")}</th><th>${t("hDl")}</th><th>${t("hStatus")}</th><th>${t("hAct")}</th></tr>`+rows.map(c=>{const d=deadline(c.den,c.ptype);const dl=!d?"—":d.left<0?`<span class="dl-bad">−${-d.left}d</span>`:`<span class="${d.left<=7?"dl-bad":d.left<=30?"dl-warn":"dl-ok"}">${d.left}d</span>`;
+  return `<tr><td>${esc(c.ref)}<div class="hint">${esc(c.claim)}</div></td><td>${esc(c.payer)}</td><td><span class="tag t-${codeOf(c.code)?.[1]||"redirect"}">${esc(c.code)}</span></td><td>${fmt(c.amt)}</td><td>${dl}</td><td><select data-id="${c.id}" class="stSel" aria-label="${t("hStatus")}">${Object.keys(st).map(k=>`<option value="${k}" ${c.status===k?"selected":""}>${esc(st[k])}</option>`).join("")}</select></td><td style="white-space:nowrap"><button class="sm" data-open="${c.id}">${esc(t("open"))}</button> <button class="sm" data-del="${c.id}">${esc(t("del"))}</button></td></tr>`}).join("");
+  document.querySelectorAll(".stSel").forEach(s=>s.onchange=()=>{const c=S.claims.find(x=>x.id===s.dataset.id);c.status=s.value;store.set(S);renderQueue()});
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{S.claims=S.claims.filter(x=>x.id!==b.dataset.del);store.set(S);renderQueue()});
+  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const c=S.claims.find(x=>x.id===b.dataset.open);$("dlgT").textContent=`${c.code} · ${c.ref}`;$("dlgB").innerHTML=`<textarea readonly style="min-height:300px;font-family:ui-monospace,Menlo,monospace;font-size:12px">${esc(c.letter)}</textarea>`;$("dlg").showModal()});
+}
+const COLS=["id","ref","claim","payer","ptype","code","rarc","cpt","amt","dos","den","facts","status","created","letter"];
+function toCSV(){return COLS.join(",")+"\n"+S.claims.map(c=>COLS.map(k=>`"${String(c[k]??"").replace(/"/g,'""')}"`).join(",")).join("\n")}
+function parseCSV(txt){const rows=[];let r=[],f="",q=false;for(let i=0;i<txt.length;i++){const ch=txt[i];if(q){if(ch==='"'){if(txt[i+1]==='"'){f+='"';i++}else q=false}else f+=ch}else{if(ch==='"')q=true;else if(ch===","){r.push(f);f=""}else if(ch==="\n"){r.push(f);rows.push(r);r=[];f=""}else if(ch!=="\r")f+=ch}}if(f||r.length){r.push(f);rows.push(r)}return rows}
+function dl(name,txt,type){const u=URL.createObjectURL(new Blob([txt],{type}));const a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),500)}
+function report(){
+  const L=S.claims,st=S.settings||{};const by={};L.forEach(c=>{by[c.code]=by[c.code]||{n:0,a:0};by[c.code].n++;by[c.code].a+=c.amt});
+  const won=L.filter(c=>c.status==="won").reduce((s,c)=>s+c.amt,0),open=L.filter(c=>!["won","lost","billed"].includes(c.status)).reduce((s,c)=>s+c.amt,0);
+  $("report").innerHTML=`<div style="max-width:760px;margin:0 auto;font-family:var(--f)"><div style="width:160px">${document.querySelector("header .logo").innerHTML}</div><h1 style="font:800 30px var(--f)">${esc(t("reportTitle"))}</h1><p>${esc(st.clinic||"")} · ${new Date().toLocaleDateString()}</p>
+  <table class="tbl"><tr><th>${t("kTotal")}</th><td>${L.length}</td></tr><tr><th>${t("kStake")}</th><td>${fmt(open)}</td></tr><tr><th>${t("kWon")}</th><td>${fmt(won)}</td></tr></table>
+  <h2 style="font:700 20px var(--f);margin-top:24px">CARC</h2><table class="tbl"><tr><th>${t("hCode")}</th><th>#</th><th>${t("hAmt")}</th><th>${t("hAct")}</th></tr>${Object.entries(by).sort((a,b)=>b[1].a-a[1].a).map(([k,v])=>`<tr><td>${k}</td><td>${v.n}</td><td>${fmt(v.a)}</td><td>${esc(codeOf(k)?.[4][LI[S.lang]]||"")}</td></tr>`).join("")}</table>
+  <p class="hint" style="margin-top:24px">Ampli Desk · ✓ ${esc(I[S.lang].ck[0])}</p></div>`;
+  window.print();
+}
+// ---------- biblioteca ----------
+function renderLib(){const q=($("cq").value||"").toLowerCase(),li=LI[S.lang];
+  $("lib").innerHTML=C.filter(c=>!q||(c[0]+c[3][li]+c[4][li]).toLowerCase().includes(q)).map(c=>`<div class="card"><h3>${c[0]} <span class="tag t-${c[1]}">${esc(t("types")[c[1]])}</span></h3><p style="margin:0 0 8px">${esc(c[3][li])}</p><p class="hint" style="margin:0">→ ${esc(c[4][li])}</p></div>`).join("")}
+// ---------- práctica ----------
+let QZ={i:0,score:0,done:false};
+function renderQuiz(){const li=LI[S.lang],box=$("quiz");
+  if(QZ.i>=PRACT.length){box.innerHTML=`<p style="font:800 28px var(--f)">${esc(t("score"))}: ${QZ.score}/${PRACT.length}</p><button class="pri" id="qr">${esc(t("restart"))}</button>`;$("qr").onclick=()=>{QZ={i:0,score:0,done:false};renderQuiz()};return}
+  const p=PRACT[QZ.i];box.innerHTML=`<p class="hint">${QZ.i+1}/${PRACT.length} · ${esc(t("score"))}: ${QZ.score}</p><p style="font-weight:600;font-size:17px">${esc(p.q[li])}</p>`+p.o.map((o,k)=>`<button class="quiz-opt" data-k="${k}">${esc(o[li])}</button>`).join("")+`<p id="qe" class="hint" aria-live="polite"></p><button id="qn" class="pri" hidden>${esc(t("next"))}</button>`;
+  box.querySelectorAll(".quiz-opt").forEach(b=>b.onclick=()=>{if(QZ.done)return;QZ.done=true;const k=+b.dataset.k;if(k===p.a)QZ.score++;box.querySelectorAll(".quiz-opt").forEach(x=>{if(+x.dataset.k===p.a)x.classList.add("right");else if(x===b)x.classList.add("wrong")});$("qe").textContent=p.e[li];$("qn").hidden=false});
+  $("qn").onclick=()=>{QZ.i++;QZ.done=false;renderQuiz()};
+}
+// ---------- eventos ----------
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.tab))});
+$("lang").onchange=e=>{S.lang=e.target.value;A.setLang(S.lang);store.set(S);applyLang();renderSales()};
+["f-code","f-den","f-ptype"].forEach(id=>$(id).addEventListener("change",renderCodeInfo));
+$("genBtn").onclick=()=>{const f=form();if(!f.code){toast(t("fill"));$("f-code").focus();return}$("letter").value=buildLetter(f);$("checks").querySelectorAll("input").forEach(x=>x.checked=false);updChecks();$("letter").scrollTop=0;$("letter").focus({preventScroll:true});A.track("letter_generated",{code:f.code,ptype:f.ptype})};
+$("letter").addEventListener("input",updChecks);
+$("copyLetter").onclick=()=>copy($("letter").value);
+$("dlLetter").onclick=()=>dl(`appeal_${form().claim||"draft"}.txt`,$("letter").value,"text/plain");
+$("copyPrompt").onclick=()=>{const f=form();if(!f.code){toast(t("fill"));return}if(!$("letter").value)$("letter").value=buildLetter(f);copy(buildPrompt(f))};
+$("demoBtn").onclick=()=>{const d=new Date();const iso=x=>{const z=new Date(d);z.setDate(z.getDate()-x);return z.toISOString().slice(0,10)};
+  Object.entries({"f-ref":"J.R. · INT-0042","f-claim":"2026110400123","f-payer":"UnitedHealthcare","f-ptype":"commercial","f-code":"CO-197","f-rarc":"N54","f-cpt":"73721","f-amt":"1240","f-dos":iso(38),"f-den":iso(12),"f-facts":"Authorization A55120 approved 3 days before the date of service (screenshot from payer portal).\nOrdering physician note documents 6 weeks of knee pain unresolved with physical therapy."}).forEach(([k,v])=>$(k).value=v);
+  if(!S.settings.clinic){S.settings={clinic:"Sunrise Family Clinic",addr:"1200 Main St, Austin, TX 78701",npi:"1234567890",tin:"XX-XXXXXXX",op:"Valentina Rojas",phone:"(512) 555-0100"};store.set(S);loadSettings()}
+  renderCodeInfo();$("genBtn").click()};
+$("clearBtn").onclick=()=>{document.querySelectorAll("#p-new input,#p-new textarea,#p-new select").forEach(x=>{if(x.tagName==="SELECT")x.selectedIndex=0;else x.value=""});$("letter").value="";renderCodeInfo();renderChecks()};
+$("saveBtn").onclick=()=>{const f=form();S.claims.unshift(Object.assign(f,{id:Date.now().toString(36),status:"review",created:new Date().toISOString().slice(0,10),letter:$("letter").value}));store.set(S);toast(t("saved"));A.track("claim_saved",{code:f.code});$("clearBtn").click();renderQueue()};
+$("q").oninput=renderQueue;$("cq").oninput=renderLib;
+$("csvBtn").onclick=()=>dl("ampli_desk_claims.csv","\ufeff"+toCSV(),"text/csv");
+$("impBtn").onclick=()=>$("csvIn").click();
+$("csvIn").onchange=async e=>{const file=e.target.files[0];if(!file)return;const rows=parseCSV((await file.text()).replace(/^\ufeff/,""));const h=rows.shift()||[];let n=0;rows.forEach(r=>{if(r.length<3)return;const o={};h.forEach((k,i)=>o[k]=r[i]);o.amt=parseFloat(o.amt)||0;o.id=o.id||Math.random().toString(36).slice(2);if(!S.claims.some(x=>x.id===o.id)){S.claims.push(o);n++}});store.set(S);renderQueue();toast(t("imported").replace("{n}",n));e.target.value=""};
+$("reportBtn").onclick=()=>{A.track("report_printed",{n:S.claims.length});report()};
+function loadSettings(){const s=S.settings||{};[["s-clinic","clinic"],["s-addr","addr"],["s-npi","npi"],["s-tin","tin"],["s-op","op"],["s-phone","phone"]].forEach(([id,k])=>$(id).value=s[k]||"")}
+$("saveSet").onclick=async()=>{S.settings={clinic:$("s-clinic").value.trim(),addr:$("s-addr").value.trim(),npi:$("s-npi").value.trim(),tin:$("s-tin").value.trim(),op:$("s-op").value.trim(),phone:$("s-phone").value.trim()};store.set(S);
+  if(A.user()){await A.saveProfile({practice_name:S.settings.clinic,practice_addr:S.settings.addr,npi:S.settings.npi,tin:S.settings.tin,operator_name:S.settings.op,phone:S.settings.phone,lang:S.lang})}
+  toast(t("settingsSaved"))};
+$("wipe").onclick=()=>{if(confirm(t("confirmWipe"))){S={lang:S.lang,claims:[],settings:{}};store.set(S);loadSettings();renderQueue();}};
+const root=document.documentElement;
+$("themeBtn").onclick=()=>{const d=root.dataset.theme==="dark"||(!root.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);root.dataset.theme=d?"light":"dark"};
+window.addEventListener("afterprint",()=>{$("report").innerHTML=""});
+function renderSales(){
+  const p=A.profile(),role=(p&&p.role)||"student",box=$("sales");
+  let hidden=false;try{hidden=sessionStorage.getItem("ampli_sales_x")==="1"}catch(e){}
+  if(hidden){box.hidden=true;return}
+  const clinic=role==="clinic"||role==="billing";
+  $("salesTxt").textContent=clinic?t("sbClinic"):t("sbStudent");
+  $("salesBtns").innerHTML=clinic?`<button class="sm pri" data-buy="pilot">${esc(t("sbPilot"))}</button>`:`<button class="sm pri" data-buy="cohort">${esc(t("sbCohort"))}</button> <button class="sm" data-buy="kit">${esc(t("sbKit"))}</button>`;
+  box.hidden=false;
+}
+$("sales").addEventListener("click",e=>{const b=e.target.closest("[data-buy]");if(b)A.buy(b.dataset.buy)});
+$("salesX").onclick=()=>{try{sessionStorage.setItem("ampli_sales_x","1")}catch(e){}$("sales").hidden=true};
+$("gSignup").onclick=()=>A.openAuth("signup");
+$("gLogin").onclick=()=>A.openAuth("login");
+$("outBtn").onclick=()=>A.signOut().then(()=>location.reload());
+function boot(){
+  const u=A.user();
+  K=u?K0+":"+u.id:K0;
+  let data=store.get();
+  if(u&&!data.claims){try{const legacy=JSON.parse(localStorage.getItem(K0)||"null");if(legacy&&legacy.claims&&legacy.claims.length&&!localStorage.getItem(K0+":adopted")){data=legacy;localStorage.setItem(K0+":adopted",u.id)}}catch(e){}}
+  S=Object.assign({claims:[],settings:{}},data,{lang:S.lang});
+  const p=A.profile();
+  if(p&&!(S.settings&&S.settings.clinic)&&(p.practice_name||p.operator_name)){S.settings={clinic:p.practice_name||"",addr:p.practice_addr||"",npi:p.npi||"",tin:p.tin||"",op:p.operator_name||p.full_name||"",phone:p.phone||""};store.set(S)}
+  if(p&&!(S.settings&&S.settings.op)&&p.full_name){S.settings=Object.assign({},S.settings,{op:p.full_name})}
+  $("who").hidden=!u;$("outBtn").hidden=!u;if(u){$("who").textContent=(p&&p.full_name)||u.email;$("who").title=u.email}
+  $("localBar").hidden=true;$("localBar").textContent=t("localMode");
+  const gate=A.enabled&&CFG.requireLogin!==false&&!u;
+  const vgate=A.enabled&&!!u&&u.verified===false&&CFG.requireEmailVerified!==false;
+  $("gate").hidden=!gate;$("vgate").hidden=!vgate||gate;document.body.style.overflow=(gate||vgate)?"hidden":"";
+  if(vgate){$("vText").textContent=t("vText").replace("{e}",u.email)}
+  loadSettings();applyLang();renderSales();
+  if(new URLSearchParams(location.search).get("reset")==="1"&&u)A.openAuth("newpass");
+}
+$("vDone").onclick=async()=>{$("vMsg").textContent="…";const u=await A.reloadUser();if(u&&u.verified){$("vMsg").textContent="";boot()}else{$("vMsg").textContent=t("vNot")}};
+$("vResend").onclick=async()=>{try{await A.resendVerification();$("vMsg").textContent=t("vSent")}catch(e){$("vMsg").textContent=A.t("errRate")}};
+$("vOut").onclick=()=>A.signOut().then(()=>location.reload());
+A.ready.then(boot);
+let lastKey=null;A.onAuth(c=>{const k=c.user?c.user.id+":"+c.user.verified:null;if(k!==lastKey){lastKey=k;boot()}});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ampli · La credencial era el muro. La IA es la escalera.</title>
+<meta name="description" content="Ampli forma operadores bilingües que apelan reclamos médicos negados en EE.UU. con IA y verificación humana. Cohorte de 3 semanas.">
+<meta property="og:title" content="Ampli · La credencial era el muro. La IA es la escalera.">
+<meta property="og:description" content="Un oficio experto en 3 semanas, con IA y un método verificable.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20class%3D%22%22%20viewBox%3D%226%200%2088%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20role%3D%22img%22%20aria-label%3D%22Ampli%22%3E%3Cpath%20d%3D%22M35.27%2048.5L64.73%2048.5L64.73%2059.5L35.27%2059.5Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M26.55%2072.5L73.45%2072.5L73.45%2083.5L26.55%2083.5Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M12.00%2096L28.00%2096L52.00%2030L36.00%2030Z%22%20fill%3D%22%231D3FBB%22/%3E%3Cpath%20d%3D%22M72.00%2096L88.00%2096L64.00%2030L48.00%2030Z%22%20fill%3D%22%231D3FBB%22/%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2213%22%20r%3D%2210%22%20fill%3D%22%23FFC83D%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--cob:#1D3FBB;--sun:#FFC83D;--ink:#14162B;--paper:#F6F7FB;--fog:#DDE3F7;--ok:#167A52;
+--bg:var(--paper);--fg:var(--ink);--muted:#4A4F6A;--line:#CCD3EA;--card:#fff;--link:var(--cob);
+--f:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--r:"Literata",Georgia,serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1430;--fg:#F6F7FB;--muted:#AEB6D6;--line:#2A3366;--card:#161C40;--link:#7B93FF;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1430;--fg:#F6F7FB;--muted:#AEB6D6;--line:#2A3366;--card:#161C40;--link:#7B93FF;color-scheme:dark}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}html{scroll-behavior:smooth;scroll-padding-top:calc(76px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--f)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+a{color:var(--link)}
+img,svg{max-width:100%}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:12px;height:68px}
+header nav{margin-right:8px}
+@media(max-width:560px){header .btn.pri.sm{display:none}}
+header .logo{width:110px;display:block;flex:none}
+header nav{display:flex;gap:20px;flex:1}
+header nav a{color:var(--fg);text-decoration:none;font-weight:500;font-size:15px}
+header nav a:hover{color:var(--link)}
+select{font:inherit;font-size:14px;color:var(--fg);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:7px 10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 15px var(--f);text-decoration:none;border-radius:999px;padding:13px 22px;border:2px solid var(--fg);color:var(--fg);background:transparent;cursor:pointer}
+.btn.pri{background:var(--cob);border-color:var(--cob);color:#fff}
+.btn.sun{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.btn.sm{padding:8px 15px;font-size:14px}
+@media(max-width:900px){header nav{display:none}header .wrap{justify-content:space-between}}
+/* hero */
+.hero{padding:clamp(48px,8vw,110px) 0 clamp(40px,6vw,80px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:40px;align-items:end}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero .climb{max-width:220px}}
+.hero h1{font:800 clamp(46px,7.6vw,104px)/.94 var(--f);letter-spacing:-.035em;margin:0 0 26px}
+.hero h1 span{display:block}
+.hero h1 .l2{color:var(--link)}
+.hero p.sub{font:400 clamp(18px,2vw,21px)/1.55 var(--r);max-width:46ch;margin:0 0 30px;color:var(--fg)}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .note{font-size:14px;color:var(--muted);margin-top:16px}
+.climb{position:relative;width:100%;max-width:360px;justify-self:end}
+.climb svg{width:100%;height:auto;display:block}
+.climb .dot{animation:rise 2.4s cubic-bezier(.6,.05,.2,1) .3s both}
+@keyframes rise{0%{transform:translateY(78px)}35%{transform:translateY(52px)}60%{transform:translateY(30px)}100%{transform:translateY(0)}}
+/* marquee */
+.marq{border-block:1px solid var(--line);overflow:hidden;padding:18px 0;background:var(--card)}
+.marq .track{display:flex;gap:46px;width:max-content;animation:mq 38s linear infinite;font:700 clamp(22px,3vw,34px) var(--f);letter-spacing:-.01em}
+.marq .track span{display:flex;align-items:center;gap:46px}
+.marq .track span::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--sun)}
+@keyframes mq{to{transform:translateX(-50%)}}
+section{padding:clamp(64px,9vw,120px) 0}
+.kick{font:600 15px var(--f);color:var(--link);margin:0 0 12px}
+h2{font:800 clamp(34px,5vw,62px)/1 var(--f);letter-spacing:-.025em;margin:0 0 20px;max-width:18ch}
+.lead{font:400 20px/1.6 var(--r);max-width:56ch;margin:0}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:48px;border-top:2px solid var(--fg)}
+.stats div{padding:24px 24px 0 0}
+.stats b{display:block;font:800 clamp(56px,8vw,104px)/.9 var(--f);letter-spacing:-.04em}
+.stats p{margin:10px 0 0;max-width:30ch;color:var(--muted)}
+@media(max-width:760px){.stats{grid-template-columns:1fr}.stats div{padding:24px 0;border-bottom:1px solid var(--line)}}
+.src{font-size:13px;color:var(--muted);margin-top:22px}
+.solve{margin-top:72px}
+.solve-t{font:800 clamp(26px,3.4vw,40px)/1.1 var(--f);letter-spacing:-.02em;margin:0 0 26px;max-width:24ch}
+.solve-g{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.solve-g{grid-template-columns:1fr}}
+.solve-c{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}
+.solve-who{display:inline-block;font:700 14px var(--f);background:var(--fog);color:#14162B;padding:4px 12px;border-radius:999px;margin-bottom:14px}
+.solve-c ul{list-style:none;margin:0;padding:0}
+.solve-c li{padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
+.solve-c li:last-child{border:0}
+.solve-c li b{font:800 26px/1 var(--f);display:block;margin-bottom:4px;color:var(--link)}
+.bridge{margin-top:20px;background:var(--cob);color:#fff;border-radius:18px;padding:28px}
+.bridge b{font:800 24px/1.2 var(--f);display:block;margin-bottom:8px}
+.bridge p{margin:0;font:400 18px/1.6 var(--r);max-width:70ch}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:44px;counter-reset:s}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{counter-increment:s;padding:26px;background:var(--card);border:1px solid var(--line);border-radius:18px;position:relative}
+.step::before{content:counter(s);display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--sun);color:var(--ink);font:800 19px var(--f);margin-bottom:18px}
+.step h3{font:700 23px/1.15 var(--f);margin:0 0 8px}.step p{margin:0;color:var(--muted)}
+/* cohort week */
+.dark{background:var(--cob);color:#fff}
+.dark .kick{color:var(--sun)}.dark a{color:#fff}
+.week{margin-top:44px;border-top:1px solid rgba(255,255,255,.35)}
+.week li{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,1.2fr);gap:20px;padding:22px 0;border-bottom:1px solid rgba(255,255,255,.35);align-items:baseline}
+.week ol{list-style:none;margin:0;padding:0}
+.week .w{font:600 14px var(--f);opacity:.8}
+.week h3{font:700 24px/1.15 var(--f);margin:0}
+.week p{margin:0;opacity:.9;font-family:var(--r)}
+@media(max-width:760px){.week li{grid-template-columns:1fr;gap:6px}}
+/* desk */
+.desk{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+@media(max-width:900px){.desk{grid-template-columns:1fr}}
+.screen{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;font-size:14px;box-shadow:0 30px 60px -40px rgba(20,22,43,.5)}
+.screen .bar{display:flex;gap:6px;margin-bottom:14px}.screen .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.screen .code{border-left:4px solid var(--cob);padding:8px 12px;background:color-mix(in srgb,var(--fog) 40%,transparent);border-radius:0 8px 8px 0;margin-bottom:12px}
+.screen .ck{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}
+.screen .ck i{width:16px;height:16px;border-radius:4px;background:var(--ok);flex:none}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;background:var(--cob);color:#fff}
+.feat{list-style:none;padding:0;margin:24px 0 28px}
+.feat li{padding:10px 0 10px 30px;border-bottom:1px solid var(--line);position:relative}
+.feat li::before{content:"";position:absolute;left:0;top:18px;width:12px;height:12px;border-radius:50%;background:var(--sun)}
+/* pricing */
+.prices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:44px}
+@media(max-width:1000px){.prices{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.prices{grid-template-columns:1fr}}
+.price{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:12px}
+.price.hl{border:2px solid var(--cob);position:relative}
+.price .who{font:600 13px var(--f);color:var(--muted)}
+.price h3{font:700 21px/1.15 var(--f);margin:0}
+.price .amt{font:800 46px/1 var(--f);letter-spacing:-.03em}
+.price .amt small{font:500 15px var(--f);color:var(--muted);letter-spacing:0}
+.price ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;flex:1}
+.badge{position:absolute;top:-13px;left:20px;background:var(--sun);color:var(--ink);font:700 13px var(--f);padding:4px 12px;border-radius:999px}
+/* forms */
+.forms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:44px}
+@media(max-width:860px){.forms{grid-template-columns:1fr}}
+form.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}
+form h3{font:700 24px var(--f);margin:0 0 6px}
+form .hint{font-size:14px;color:var(--muted);margin:0 0 18px}
+label{display:block;font:600 14px var(--f);margin:12px 0 5px}
+input,textarea{font:inherit;font-size:16px;width:100%;padding:11px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.consent{display:flex;gap:10px;align-items:flex-start;font:400 13px/1.5 var(--f);color:var(--muted);margin:16px 0}
+.consent input{width:18px;height:18px;flex:none;margin-top:2px}
+.ok{display:none;padding:14px;border-radius:10px;background:var(--ok);color:#fff;font-weight:600;margin-top:12px}
+/* founder */
+.founder{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:48px;align-items:center}
+@media(max-width:860px){.founder{grid-template-columns:1fr}}
+.portrait{aspect-ratio:4/5;border-radius:18px;background:var(--sun);display:grid;place-items:end start;padding:22px;position:relative;overflow:hidden}
+.portrait .rungs{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-evenly;padding:0 18%}
+.portrait .rungs i{height:18px;background:var(--cob);opacity:.9}
+.portrait b{position:relative;background:var(--ink);color:#fff;padding:6px 12px;border-radius:999px;font-size:14px}
+blockquote{font:400 clamp(22px,2.6vw,30px)/1.4 var(--r);margin:0 0 20px;font-style:italic}
+/* faq */
+details{border-bottom:1px solid var(--line);padding:4px 0}
+summary{cursor:pointer;font:700 20px var(--f);padding:18px 0;list-style:none;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-weight:400;font-size:28px;line-height:1;color:var(--link)}
+details[open] summary::after{content:"−"}
+details p{margin:0 0 20px;max-width:70ch;color:var(--muted)}
+.final{background:var(--ink);color:#fff;text-align:left}
+.final h2{color:#fff;max-width:14ch}
+footer{padding:48px 0 60px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+footer .wrap{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:30px}
+@media(max-width:760px){footer .wrap{grid-template-columns:1fr}}
+footer a{color:var(--muted)}
+.legal{font-size:12px;margin-top:20px;max-width:80ch}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a href="#top" class="logo" aria-label="Ampli"><svg class="" viewBox="29 -950 3304 1140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ampli"><g transform="translate(0,-939.1) scale(9.7826)"><path d="M37.45 44.5L62.55 44.5L62.55 51.5L37.45 51.5Z" fill="#1D3FBB"/><path d="M31.64 60.5L68.36 60.5L68.36 67.5L31.64 67.5Z" fill="#1D3FBB"/><path d="M25.82 76.5L74.18 76.5L74.18 83.5L25.82 83.5Z" fill="#1D3FBB"/><path d="M13.50 96L26.50 96L50.50 30L37.50 30Z" fill="#1D3FBB"/><path d="M73.50 96L86.50 96L62.50 30L49.50 30Z" fill="#1D3FBB"/><circle cx="50" cy="13" r="10" fill="#FFC83D"/></g><g transform="translate(1000,0)"><g transform="scale(1,-1)"><path transform="translate(0,0)" d="M175.50006103515625 -13.83331298828125Q135.3333740234375 -13.83331298828125 99.75009155273438 0.3333740234375Q64.16680908203125 14.50006103515625 41.750213623046875 45.916717529296875Q19.3336181640625 77.3333740234375 19.3336181640625 129.49993896484375Q19.3336181640625 177.49981689453125 37.83355712890625 207.58309936523438Q56.33349609375 237.6663818359375 87.91677856445312 256.0830383300781Q119.50006103515625 274.49969482421875 157.83343505859375 284.1663818359375Q196.16680908203125 293.83306884765625 235.0003662109375 300.83306884765625Q288.16717529296875 310.6663818359375 314.50054931640625 316.5830383300781Q340.83392333984375 322.49969482421875 350.0838928222656 330.7497253417969Q359.3338623046875 338.999755859375 359.3338623046875 353.66650390625Q359.3338623046875 387.6671142578125 335.0835266113281 405.50079345703125Q310.83319091796875 423.33447265625 272.49945068359375 423.33447265625Q248.6658935546875 423.33447265625 224.9990234375 414.50103759765625Q201.3321533203125 405.6676025390625 185.91531372070312 383.9174499511719Q170.49847412109375 362.16729736328125 170.49835205078125 323.00048828125L41.33349609375 333.50054931640625Q40.83367919921875 393.6668701171875 61.583648681640625 433.5833435058594Q82.3336181640625 473.49981689453125 117.41677856445312 496.4164123535156Q152.49993896484375 519.3330078125 194.1663818359375 529.1663208007812Q235.83282470703125 538.9996337890625 277.16595458984375 538.9996337890625Q351.16534423828125 538.9996337890625 400.7485046386719 511.33319091796875Q450.3316650390625 483.666748046875 475.2483825683594 430.7503967285156Q500.16510009765625 377.83404541015625 500.16510009765625 301.16766357421875V206.16754150390625Q500.331787109375 172.000732421875 500.4151306152344 137.33392333984375Q500.49847412109375 102.6671142578125 500.5818176269531 68.41696166992188Q500.6651611328125 34.16680908203125 500.6651611328125 0H374.33349609375Q375.16693115234375 38.3336181640625 375.83367919921875 76.91714477539062Q376.50042724609375 115.50067138671875 377.16717529296875 158.16754150390625H370.6671142578125Q365.83367919921875 110.83392333984375 339.9169616699219 71.75039672851562Q314.000244140625 32.6668701171875 272.0835266113281 9.416778564453125Q230.16680908203125 -13.83331298828125 175.50006103515625 -13.83331298828125ZM231.998779296875 93.49871826171875Q252.49920654296875 93.49871826171875 274.5828552246094 101.58224487304688Q296.66650390625 109.665771484375 315.8333740234375 127.16607666015625Q335.000244140625 144.6663818359375 347.0003662109375 173.41665649414062Q359.00048828125 202.16693115234375 359.3338623046875 242.6671142578125L359.50054931640625 266.333740234375L386.3338623046875 270.667236328125Q377.50042724609375 257.00048828125 357.4169006347656 248.91714477539062Q337.3333740234375 240.83380126953125 312.0830993652344 236.25045776367188Q286.83282470703125 231.6671142578125 261.0825500488281 226.91708374023438Q235.332275390625 222.16705322265625 213.33203125 213.8336181640625Q191.331787109375 205.50018310546875 177.66497802734375 191.33331298828125Q163.9981689453125 177.16644287109375 163.9981689453125 152.332763671875Q163.9981689453125 124.16583251953125 183.24826049804688 108.832275390625Q202.49835205078125 93.49871826171875 231.998779296875 93.49871826171875Z" fill="#1D3FBB"/><path transform="translate(513,0)" d="M38.83367919921875 0V277.3314208984375L38.3336181640625 524.9996337890625H162.33203125L158.6649169921875 302.6654052734375H166.998291015625Q173.998291015625 388.16558837890625 194.58163452148438 439.9158020019531Q215.16497802734375 491.666015625 249.99835205078125 515.3328247070312Q284.83172607421875 538.9996337890625 333.6651611328125 538.9996337890625Q384.3319091796875 538.9996337890625 415.49859619140625 513.5828552246094Q446.665283203125 488.16607666015625 461.16522216796875 435.99920654296875Q475.6651611328125 383.83233642578125 473.49835205078125 302.6654052734375H481.83172607421875Q488.49835205078125 387.16558837890625 510.2483215332031 438.9158020019531Q531.998291015625 490.666015625 568.2483215332031 514.8328247070312Q604.4983520507812 538.9996337890625 654.8318481445312 538.9996337890625Q695.6651611328125 538.9996337890625 725.6651611328125 523.9996337890625Q755.6651611328125 508.9996337890625 776.0818176269531 478.9162902832031Q796.4984741210938 448.83294677734375 806.4984741210938 403.2496032714844Q816.4984741210938 357.666259765625 816.4984741210938 296.49957275390625V0H672.0006103515625V282.666259765625Q672.0006103515625 326.16693115234375 664.7505187988281 354.833984375Q657.5004272460938 383.50103759765625 642.7502136230469 397.4178771972656Q628 411.334716796875 604.9996337890625 411.334716796875Q574.3323974609375 411.334716796875 550.0821228027344 385.167724609375Q525.8318481445312 359.000732421875 511.7484436035156 308.0835876464844Q497.6650390625 257.16644287109375 497.6650390625 181.3326416015625V0H356.6671142578125V287.16632080078125Q356.6671142578125 329.83355712890625 349.33367919921875 357.0839538574219Q342.000244140625 384.3343505859375 326.9167175292969 397.83453369140625Q311.83319091796875 411.334716796875 288.99951171875 411.334716796875Q259.6656494140625 411.334716796875 235.83203125 387.8343505859375Q211.9984130859375 364.333984375 197.58163452148438 313.4168395996094Q183.16485595703125 262.49969482421875 183.16485595703125 181.3326416015625V0Z" fill="#1D3FBB"/><path transform="translate(1343,0)" d="M38.3336181640625 -145.83306884765625 38.6669921875 326.83172607421875 38.3336181640625 524.9996337890625H166.16522216796875L163.33154296875 360.332763671875H170.49822998046875Q181.998291015625 421.3330078125 204.9984130859375 460.99969482421875Q227.99853515625 500.6663818359375 262.9152526855469 519.8330078125Q297.83197021484375 538.9996337890625 345.49847412109375 538.9996337890625Q406.49835205078125 538.9996337890625 450.5817565917969 508.0830383300781Q494.6651611328125 477.16644287109375 518.165283203125 416.16650390625Q541.6654052734375 355.16656494140625 541.6654052734375 264.66650390625Q541.6654052734375 169 515.9987182617188 107.25003051757812Q490.33203125 45.50006103515625 446.16534423828125 15.8333740234375Q401.9986572265625 -13.83331298828125 345.83197021484375 -13.83331298828125Q298.9984130859375 -13.83331298828125 263.5816345214844 6.50018310546875Q228.16485595703125 26.83367919921875 205.41482543945312 67.91720581054688Q182.664794921875 109.000732421875 173.83148193359375 170.0008544921875L164.49810791015625 169.83416748046875Q169.83148193359375 137.0003662109375 173.91482543945312 104.25021362304688Q177.9981689453125 71.50006103515625 180.41482543945312 41.083404541015625Q182.83148193359375 10.666748046875 182.83148193359375 -16.9998779296875V-145.83306884765625ZM293.49969482421875 106.16510009765625Q327.6666259765625 106.16510009765625 350.4169006347656 126.83184814453125Q373.16717529296875 147.49859619140625 384.33404541015625 182.58224487304688Q395.50091552734375 217.6658935546875 395.50091552734375 259.83331298828125Q395.50091552734375 304.00048828125 383.9174499511719 338.9174499511719Q372.333984375 373.83441162109375 349.66705322265625 394.33453369140625Q327.0001220703125 414.83465576171875 293.6663818359375 414.83465576171875Q269.83245849609375 414.83465576171875 249.41549682617188 404.33441162109375Q228.99853515625 393.83416748046875 213.9984130859375 374.167236328125Q198.998291015625 354.50030517578125 190.41494750976562 326.6668701171875Q181.83160400390625 298.83343505859375 181.83160400390625 263.333740234375V256.16693115234375Q181.83160400390625 229.0006103515625 187.49822998046875 206.16717529296875Q193.16485595703125 183.333740234375 203.16485595703125 164.75009155273438Q213.16485595703125 146.16644287109375 227.16497802734375 132.9993896484375Q241.16510009765625 119.83233642578125 257.9154357910156 112.99871826171875Q274.665771484375 106.16510009765625 293.49969482421875 106.16510009765625Z" fill="#1D3FBB"/><path transform="translate(1889,0)" d="M38.6669921875 0V694.9993896484375H182.9981689453125V0Z" fill="#1D3FBB"/><path transform="translate(2091,0)" d="M38.6669921875 0V524.9996337890625H182.9981689453125V0Z" fill="#1D3FBB"/><circle cx="2201.8" cy="645.0" r="90.0" fill="#FFC83D"/></g></g></svg></a>
+  <nav aria-label="Principal"><a href="#oficio" data-i="nCraft"></a><a href="#cohorte" data-i="nCohort"></a><a href="#desk" data-i="nDesk"></a><a href="#precios" data-i="nPrice"></a><a href="#faq">FAQ</a></nav>
+  <select id="lang" aria-label="Language"><option value="es">ES</option><option value="en">EN</option><option value="pt">PT</option><option value="fr">FR</option></select>
+  <button type="button" class="btn sm" id="acctBtn"></button>
+  <button type="button" class="btn sm" id="outBtn" hidden></button>
+  <a href="#postula" class="btn pri sm" data-i="apply"></a>
+</div></header>
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div>
+    <h1><span data-i="h1a"></span><span class="l2" data-i="h1b"></span></h1>
+    <p class="sub" data-i="heroSub"></p>
+    <div class="ctas"><a href="#postula" class="btn pri" data-i="ctaApply"></a><a href="#clinicas" class="btn" data-i="ctaClinic"></a></div>
+    <p class="note" data-i="heroNote"></p>
+  </div>
+  <div class="climb" aria-hidden="true">
+    <svg viewBox="6 0 88 100"><path d="M37.45 44.5L62.55 44.5L62.55 51.5L37.45 51.5Z" fill="#1D3FBB"/><path d="M31.64 60.5L68.36 60.5L68.36 67.5L31.64 67.5Z" fill="#1D3FBB"/><path d="M25.82 76.5L74.18 76.5L74.18 83.5L25.82 83.5Z" fill="#1D3FBB"/><path d="M13.50 96L26.50 96L50.50 30L37.50 30Z" fill="#1D3FBB"/><path d="M73.50 96L86.50 96L62.50 30L49.50 30Z" fill="#1D3FBB"/><circle class="dot" cx="50" cy="13" r="10" fill="#FFC83D"/></svg>
+  </div>
+</div></section>
+<div class="marq" aria-hidden="true"><div class="track" id="marq"></div></div>
+
+<section id="problema"><div class="wrap">
+  <p class="kick" data-i="pKick"></p>
+  <h2 data-i="pTitle"></h2>
+  <p class="lead" data-i="pLead"></p>
+  <div class="stats">
+    <div><b>19%</b><p data-i="s1"></p></div>
+    <div><b>~1%</b><p data-i="s2"></p></div>
+    <div><b>44%</b><p data-i="s3"></p></div>
+  </div>
+  <p class="src" data-i="src"></p>
+  <div class="solve">
+    <h3 class="solve-t" data-i="solveT"></h3>
+    <div class="solve-g">
+      <div class="solve-c"><span class="solve-who" data-i="cliT"></span><ul id="cliL"></ul></div>
+      <div class="solve-c"><span class="solve-who" data-i="talT"></span><ul id="talL"></ul></div>
+    </div>
+    <div class="bridge"><b data-i="brT"></b><p data-i="brP"></p></div>
+    <p class="src" data-i="src2"></p>
+  </div>
+</div></section>
+
+<section id="oficio" style="padding-top:0"><div class="wrap">
+  <p class="kick" data-i="cKick"></p>
+  <h2 data-i="cTitle"></h2>
+  <p class="lead" data-i="cLead"></p>
+  <div class="steps">
+    <div class="step"><h3 data-i="st1"></h3><p data-i="st1p"></p></div>
+    <div class="step"><h3 data-i="st2"></h3><p data-i="st2p"></p></div>
+    <div class="step"><h3 data-i="st3"></h3><p data-i="st3p"></p></div>
+  </div>
+</div></section>
+
+<section id="cohorte" class="dark"><div class="wrap">
+  <p class="kick" data-i="wKick"></p>
+  <h2 data-i="wTitle"></h2>
+  <p class="lead" data-i="wLead"></p>
+  <div class="week"><ol id="week"></ol></div>
+</div></section>
+
+<section id="desk"><div class="wrap desk">
+  <div>
+    <p class="kick" data-i="dKick"></p>
+    <h2 data-i="dTitle"></h2>
+    <p class="lead" data-i="dLead"></p>
+    <ul class="feat" id="feat"></ul>
+    <a class="btn pri" href="app/" id="deskLink" data-i="dCta"></a>
+  </div>
+  <div class="screen" aria-hidden="true">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <div class="code"><b>CO-197</b> <span class="tag" data-i="tagAppeal"></span><div data-i="mCode"></div></div>
+    <div style="font:500 12px ui-monospace,Menlo,monospace;background:var(--bg);border-radius:8px;padding:12px;margin-bottom:12px;line-height:1.6;color:var(--muted)">RE: Request for Reconsideration<br>Claim #2026110400123 · CPT 73721<br>Authorization A55120 was approved prior to…</div>
+    <div class="ck"><i></i><span data-i="mck1"></span></div><div class="ck"><i></i><span data-i="mck2"></span></div><div class="ck"><i></i><span data-i="mck3"></span></div>
+  </div>
+</div></section>
+
+<section id="precios" style="padding-top:0"><div class="wrap">
+  <p class="kick" data-i="prKick"></p>
+  <h2 data-i="prTitle"></h2>
+  <div class="prices" id="prices"></div>
+  <p class="src" data-i="prNote"></p>
+</div></section>
+
+<section id="fundadora" style="background:var(--card);border-block:1px solid var(--line)"><div class="wrap founder">
+  <div class="portrait"><div class="rungs"><i></i><i></i><i></i></div><b>Michell Anyosa</b></div>
+  <div><p class="kick" data-i="fKick"></p><blockquote data-i="fQuote"></blockquote><p class="lead" data-i="fLead"></p></div>
+</div></section>
+
+<section id="postula"><div class="wrap">
+  <p class="kick" data-i="aKick"></p>
+  <h2 data-i="aTitle"></h2>
+  <div class="forms">
+    <form class="card" id="fTalent" novalidate>
+      <h3 data-i="ftTitle"></h3><p class="hint" data-i="ftHint"></p>
+      <label for="t-name" data-i="lName"></label><input id="t-name" name="name" autocomplete="name" required>
+      <label for="t-email" data-i="lEmail"></label><input id="t-email" name="email" type="email" autocomplete="email" required>
+      <div class="two"><div><label for="t-country" data-i="lCountry"></label><input id="t-country" name="country" autocomplete="country-name" required></div><div><label for="t-eng" data-i="lEng"></label><select id="t-eng" name="english" style="width:100%;border-radius:8px;padding:11px"><option>B1</option><option selected>B2</option><option>C1</option><option>C2</option></select></div></div>
+      <label for="t-job" data-i="lJob"></label><input id="t-job" name="job">
+      <label class="consent"><input type="checkbox" required name="consent"><span data-i="consent"></span></label>
+      <button class="btn pri" type="submit" data-i="send"></button>
+      <div class="ok" role="status"></div>
+    </form>
+    <form class="card" id="clinicas" novalidate>
+      <h3 data-i="fcTitle"></h3><p class="hint" data-i="fcHint"></p>
+      <label for="c-name" data-i="lNameC"></label><input id="c-name" name="name" autocomplete="name" required>
+      <label for="c-email" data-i="lEmailC"></label><input id="c-email" name="email" type="email" autocomplete="email" required>
+      <div class="two"><div><label for="c-practice" data-i="lPractice"></label><input id="c-practice" name="practice" autocomplete="organization" required></div><div><label for="c-state" data-i="lState"></label><input id="c-state" name="state" required></div></div>
+      <label for="c-den" data-i="lDen"></label><input id="c-den" name="denials" type="number" min="0">
+      <label class="consent"><input type="checkbox" required name="consent"><span data-i="consentC"></span></label>
+      <button class="btn sun" type="submit" data-i="sendC"></button>
+      <div class="ok" role="status"></div>
+    </form>
+  </div>
+</div></section>
+
+<section id="faq" style="padding-top:0"><div class="wrap">
+  <h2>FAQ</h2>
+  <div id="faqs"></div>
+  <form class="card" id="fContact" novalidate style="margin-top:36px;max-width:720px">
+    <h3 data-i="ctTitle"></h3><p class="hint" data-i="ctHint"></p>
+    <div class="two"><div><label for="q-name" data-i="lName"></label><input id="q-name" name="name" autocomplete="name" required></div><div><label for="q-email" data-i="lEmail"></label><input id="q-email" name="email" type="email" autocomplete="email" required></div></div>
+    <label for="q-msg" data-i="lMsg"></label><textarea id="q-msg" name="message" rows="4" required maxlength="3000"></textarea>
+    <label class="consent"><input type="checkbox" required name="consent"><span data-i="consentCt"></span></label>
+    <button class="btn pri" type="submit" data-i="sendCt"></button>
+    <div class="ok" role="status"></div>
+  </form>
+</div></section>
+
+<section class="final"><div class="wrap">
+  <h2 data-i="endTitle"></h2>
+  <p class="lead" style="color:#DDE3F7" data-i="endLead"></p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:30px"><a href="#postula" class="btn sun" data-i="ctaApply"></a><a href="#clinicas" class="btn" style="color:#fff;border-color:#fff" data-i="ctaClinic"></a></div>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <div><div style="width:120px"><svg class="" viewBox="29 -950 3304 1140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ampli"><g transform="translate(0,-939.1) scale(9.7826)"><path d="M37.45 44.5L62.55 44.5L62.55 51.5L37.45 51.5Z" fill="#1D3FBB"/><path d="M31.64 60.5L68.36 60.5L68.36 67.5L31.64 67.5Z" fill="#1D3FBB"/><path d="M25.82 76.5L74.18 76.5L74.18 83.5L25.82 83.5Z" fill="#1D3FBB"/><path d="M13.50 96L26.50 96L50.50 30L37.50 30Z" fill="#1D3FBB"/><path d="M73.50 96L86.50 96L62.50 30L49.50 30Z" fill="#1D3FBB"/><circle cx="50" cy="13" r="10" fill="#FFC83D"/></g><g transform="translate(1000,0)"><g transform="scale(1,-1)"><path transform="translate(0,0)" d="M175.50006103515625 -13.83331298828125Q135.3333740234375 -13.83331298828125 99.75009155273438 0.3333740234375Q64.16680908203125 14.50006103515625 41.750213623046875 45.916717529296875Q19.3336181640625 77.3333740234375 19.3336181640625 129.49993896484375Q19.3336181640625 177.49981689453125 37.83355712890625 207.58309936523438Q56.33349609375 237.6663818359375 87.91677856445312 256.0830383300781Q119.50006103515625 274.49969482421875 157.83343505859375 284.1663818359375Q196.16680908203125 293.83306884765625 235.0003662109375 300.83306884765625Q288.16717529296875 310.6663818359375 314.50054931640625 316.5830383300781Q340.83392333984375 322.49969482421875 350.0838928222656 330.7497253417969Q359.3338623046875 338.999755859375 359.3338623046875 353.66650390625Q359.3338623046875 387.6671142578125 335.0835266113281 405.50079345703125Q310.83319091796875 423.33447265625 272.49945068359375 423.33447265625Q248.6658935546875 423.33447265625 224.9990234375 414.50103759765625Q201.3321533203125 405.6676025390625 185.91531372070312 383.9174499511719Q170.49847412109375 362.16729736328125 170.49835205078125 323.00048828125L41.33349609375 333.50054931640625Q40.83367919921875 393.6668701171875 61.583648681640625 433.5833435058594Q82.3336181640625 473.49981689453125 117.41677856445312 496.4164123535156Q152.49993896484375 519.3330078125 194.1663818359375 529.1663208007812Q235.83282470703125 538.9996337890625 277.16595458984375 538.9996337890625Q351.16534423828125 538.9996337890625 400.7485046386719 511.33319091796875Q450.3316650390625 483.666748046875 475.2483825683594 430.7503967285156Q500.16510009765625 377.83404541015625 500.16510009765625 301.16766357421875V206.16754150390625Q500.331787109375 172.000732421875 500.4151306152344 137.33392333984375Q500.49847412109375 102.6671142578125 500.5818176269531 68.41696166992188Q500.6651611328125 34.16680908203125 500.6651611328125 0H374.33349609375Q375.16693115234375 38.3336181640625 375.83367919921875 76.91714477539062Q376.50042724609375 115.50067138671875 377.16717529296875 158.16754150390625H370.6671142578125Q365.83367919921875 110.83392333984375 339.9169616699219 71.75039672851562Q314.000244140625 32.6668701171875 272.0835266113281 9.416778564453125Q230.16680908203125 -13.83331298828125 175.50006103515625 -13.83331298828125ZM231.998779296875 93.49871826171875Q252.49920654296875 93.49871826171875 274.5828552246094 101.58224487304688Q296.66650390625 109.665771484375 315.8333740234375 127.16607666015625Q335.000244140625 144.6663818359375 347.0003662109375 173.41665649414062Q359.00048828125 202.16693115234375 359.3338623046875 242.6671142578125L359.50054931640625 266.333740234375L386.3338623046875 270.667236328125Q377.50042724609375 257.00048828125 357.4169006347656 248.91714477539062Q337.3333740234375 240.83380126953125 312.0830993652344 236.25045776367188Q286.83282470703125 231.6671142578125 261.0825500488281 226.91708374023438Q235.332275390625 222.16705322265625 213.33203125 213.8336181640625Q191.331787109375 205.50018310546875 177.66497802734375 191.33331298828125Q163.9981689453125 177.16644287109375 163.9981689453125 152.332763671875Q163.9981689453125 124.16583251953125 183.24826049804688 108.832275390625Q202.49835205078125 93.49871826171875 231.998779296875 93.49871826171875Z" fill="#1D3FBB"/><path transform="translate(513,0)" d="M38.83367919921875 0V277.3314208984375L38.3336181640625 524.9996337890625H162.33203125L158.6649169921875 302.6654052734375H166.998291015625Q173.998291015625 388.16558837890625 194.58163452148438 439.9158020019531Q215.16497802734375 491.666015625 249.99835205078125 515.3328247070312Q284.83172607421875 538.9996337890625 333.6651611328125 538.9996337890625Q384.3319091796875 538.9996337890625 415.49859619140625 513.5828552246094Q446.665283203125 488.16607666015625 461.16522216796875 435.99920654296875Q475.6651611328125 383.83233642578125 473.49835205078125 302.6654052734375H481.83172607421875Q488.49835205078125 387.16558837890625 510.2483215332031 438.9158020019531Q531.998291015625 490.666015625 568.2483215332031 514.8328247070312Q604.4983520507812 538.9996337890625 654.8318481445312 538.9996337890625Q695.6651611328125 538.9996337890625 725.6651611328125 523.9996337890625Q755.6651611328125 508.9996337890625 776.0818176269531 478.9162902832031Q796.4984741210938 448.83294677734375 806.4984741210938 403.2496032714844Q816.4984741210938 357.666259765625 816.4984741210938 296.49957275390625V0H672.0006103515625V282.666259765625Q672.0006103515625 326.16693115234375 664.7505187988281 354.833984375Q657.5004272460938 383.50103759765625 642.7502136230469 397.4178771972656Q628 411.334716796875 604.9996337890625 411.334716796875Q574.3323974609375 411.334716796875 550.0821228027344 385.167724609375Q525.8318481445312 359.000732421875 511.7484436035156 308.0835876464844Q497.6650390625 257.16644287109375 497.6650390625 181.3326416015625V0H356.6671142578125V287.16632080078125Q356.6671142578125 329.83355712890625 349.33367919921875 357.0839538574219Q342.000244140625 384.3343505859375 326.9167175292969 397.83453369140625Q311.83319091796875 411.334716796875 288.99951171875 411.334716796875Q259.6656494140625 411.334716796875 235.83203125 387.8343505859375Q211.9984130859375 364.333984375 197.58163452148438 313.4168395996094Q183.16485595703125 262.49969482421875 183.16485595703125 181.3326416015625V0Z" fill="#1D3FBB"/><path transform="translate(1343,0)" d="M38.3336181640625 -145.83306884765625 38.6669921875 326.83172607421875 38.3336181640625 524.9996337890625H166.16522216796875L163.33154296875 360.332763671875H170.49822998046875Q181.998291015625 421.3330078125 204.9984130859375 460.99969482421875Q227.99853515625 500.6663818359375 262.9152526855469 519.8330078125Q297.83197021484375 538.9996337890625 345.49847412109375 538.9996337890625Q406.49835205078125 538.9996337890625 450.5817565917969 508.0830383300781Q494.6651611328125 477.16644287109375 518.165283203125 416.16650390625Q541.6654052734375 355.16656494140625 541.6654052734375 264.66650390625Q541.6654052734375 169 515.9987182617188 107.25003051757812Q490.33203125 45.50006103515625 446.16534423828125 15.8333740234375Q401.9986572265625 -13.83331298828125 345.83197021484375 -13.83331298828125Q298.9984130859375 -13.83331298828125 263.5816345214844 6.50018310546875Q228.16485595703125 26.83367919921875 205.41482543945312 67.91720581054688Q182.664794921875 109.000732421875 173.83148193359375 170.0008544921875L164.49810791015625 169.83416748046875Q169.83148193359375 137.0003662109375 173.91482543945312 104.25021362304688Q177.9981689453125 71.50006103515625 180.41482543945312 41.083404541015625Q182.83148193359375 10.666748046875 182.83148193359375 -16.9998779296875V-145.83306884765625ZM293.49969482421875 106.16510009765625Q327.6666259765625 106.16510009765625 350.4169006347656 126.83184814453125Q373.16717529296875 147.49859619140625 384.33404541015625 182.58224487304688Q395.50091552734375 217.6658935546875 395.50091552734375 259.83331298828125Q395.50091552734375 304.00048828125 383.9174499511719 338.9174499511719Q372.333984375 373.83441162109375 349.66705322265625 394.33453369140625Q327.0001220703125 414.83465576171875 293.6663818359375 414.83465576171875Q269.83245849609375 414.83465576171875 249.41549682617188 404.33441162109375Q228.99853515625 393.83416748046875 213.9984130859375 374.167236328125Q198.998291015625 354.50030517578125 190.41494750976562 326.6668701171875Q181.83160400390625 298.83343505859375 181.83160400390625 263.333740234375V256.16693115234375Q181.83160400390625 229.0006103515625 187.49822998046875 206.16717529296875Q193.16485595703125 183.333740234375 203.16485595703125 164.75009155273438Q213.16485595703125 146.16644287109375 227.16497802734375 132.9993896484375Q241.16510009765625 119.83233642578125 257.9154357910156 112.99871826171875Q274.665771484375 106.16510009765625 293.49969482421875 106.16510009765625Z" fill="#1D3FBB"/><path transform="translate(1889,0)" d="M38.6669921875 0V694.9993896484375H182.9981689453125V0Z" fill="#1D3FBB"/><path transform="translate(2091,0)" d="M38.6669921875 0V524.9996337890625H182.9981689453125V0Z" fill="#1D3FBB"/><circle cx="2201.8" cy="645.0" r="90.0" fill="#FFC83D"/></g></g></svg></div><p data-i="fTag"></p></div>
+  <div><b data-i="fContact"></b><br><a href="mailto:manyosa@limly.io">manyosa@limly.io</a><br><a href="https://www.linkedin.com/" rel="noopener">LinkedIn</a> · <a href="https://substack.com/" rel="noopener">Substack</a> · <a href="https://www.instagram.com/" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/" rel="noopener">TikTok</a></div>
+  <div><b>Legal</b><br><a href="legal/index.html#terms" data-i="terms"></a><br><a href="legal/index.html#privacy" data-i="privacy"></a><br><a href="legal/index.html#ai" data-i="aiLaw"></a><br><button type="button" class="btn sm" id="themeBtn" style="margin-top:10px" data-i="theme"></button></div>
+  <p class="legal" style="grid-column:1/-1" data-i="legal"></p>
+  <p class="legal" style="grid-column:1/-1;margin-top:0" data-i="aiNote"></p>
+</div></footer>
+<script src="config.js"></script>
+<script src="assets/core.js"></script>
+<script>
+"use strict";
+const CFG=window.AMPLI_CONFIG||{};const A=window.Ampli;
+const T={
+es:{ctTitle:"¿Tienes otra pregunta?",ctHint:"Escríbenos y te respondemos en menos de 24 horas.",lMsg:"Tu pregunta",consentCt:"Acepto que Ampli use mis datos para responder mi consulta, según la Política de privacidad.",sendCt:"Enviar pregunta",okCt:"Recibimos tu pregunta. Te respondemos en menos de 24 horas.",mailSubjectCt:"Pregunta desde la web de Ampli",errSave:"No pudimos guardar tu mensaje. Escríbenos directo a",aiLaw:"Uso de IA y regulación",aiNote:"Usamos IA para redactar borradores y siempre con revisión humana. Seguimos principios de transparencia y supervisión humana alineados con el Reglamento de IA de la UE, el RGPD, la LGPD de Brasil, la Ley 29733 de Perú y las leyes de privacidad de EE.UU. y Canadá. No subimos datos de pacientes a herramientas de IA.",solveT:"Qué resolvemos: dos problemas que se resuelven juntos.",cliT:"Para la clínica",talT:"Para el talento",
+cli:[["41%","de los proveedores ya tiene tasas de rechazo de 10% o más, y la cifra sube cada año desde 2022."],["43%","de los proveedores dice que le falta personal para gestionar reclamos."],["Hasta 65%","de los reclamos negados nunca se vuelve a enviar: es dinero ganado que se pierde."],["$25","cuesta en promedio rehacer un reclamo negado en un consultorio."]],
+tal:[["$24.16/h","es la mediana que gana en EE.UU. un especialista en registros médicos."],["14,200","vacantes al año se proyectan en ese oficio hasta 2034."],["Meses","de cursos y certificaciones exige el camino tradicional para entrar."],["3 semanas","dura la ruta de Ampli, con IA, práctica guiada y certificado verificable."]],
+brT:"Ampli une las dos puntas.",brP:"Formamos a personas bilingües en el oficio de apelar reclamos con IA, les damos la herramienta (Ampli Desk) y verificamos su trabajo. La clínica recupera dinero que ya ganó, por una fracción del costo de contratar en EE.UU. La persona gana un oficio experto en 3 semanas.",
+src2:"Fuentes: Experian Health, State of Claims 2025; Change Healthcare, Denials Index 2020; MGMA; U.S. Bureau of Labor Statistics, mayo 2024.",nCraft:"El oficio",nCohort:"Cohorte",nDesk:"Ampli Desk",nPrice:"Precios",apply:"Postula",
+h1a:"La credencial era el muro.",h1b:"La IA es la escalera.",heroSub:"En tres semanas aprendes a apelar reclamos médicos negados en EE.UU. con IA y un método que un experto revisa. Trabajo de especialista, sin título de especialista.",
+ctaApply:"Postula a la cohorte",ctaClinic:"Soy una clínica",heroNote:"Cohorte fundadora en español · {n} cupos · Empieza en cuanto se llenan",
+marq:["Bilingüe","Detallista","Verificado","Remoto","Certificado","Con IA","Con método","Con criterio"],
+pKick:"El problema",pTitle:"Hay dinero que nadie va a buscar.",pLead:"Las aseguradoras de EE.UU. niegan una parte enorme de los reclamos, y casi nadie apela. Cuando alguien lo hace con método, una buena parte se revierte. Ese trabajo requiere paciencia, inglés y reglas claras. Es perfecto para una persona entrenada con IA.",
+s1:"de los reclamos dentro de la red fueron negados por aseguradoras de HealthCare.gov en 2023.",s2:"de esos reclamos negados fue apelado.",s3:"de las apelaciones lograron revertir la negativa.",src:"Fuente: KFF, análisis de datos de CMS sobre planes de HealthCare.gov, publicado en enero de 2025.",
+cKick:"El oficio",cTitle:"Operador de apelaciones con IA.",cLead:"Un trabajo concreto, con reglas que se aprenden. La IA hace el borrador; tú verificas cada línea.",
+st1:"Leer el rechazo",st1p:"Interpretas la EOB y el código CARC: qué pasó, de quién es el error y si se puede apelar.",st2:"Corregir o apelar",st2p:"Eliges la acción correcta: reclamo corregido, apelación con pruebas o envío a otro pagador.",st3:"Verificar y enviar",st3p:"Pasas el checklist humano de 8 puntos y envías por el canal oficial antes del plazo.",
+wKick:"La cohorte fundadora",wTitle:"Tres semanas. Seis sesiones en vivo.",wLead:"Martes y jueves, 8 p. m. hora de Lima, Bogotá y Nueva York. Grabadas por si no llegas.",
+week:[["Semana 1","Cómo se paga la salud en EE.UU.","Seguros, EOB, CPT, ICD-10 y por qué se niegan los reclamos."],["Semana 1","Los 22 códigos que importan","Práctica con casos reales anonimizados en Ampli Desk."],["Semana 2","IA con método","Prompts verificados, límites de la IA y cómo detectar errores."],["Semana 2","La carta que gana","Estructura, pruebas y plazos por tipo de pagador."],["Semana 3","Privacidad y HIPAA","Qué datos nunca subir a una IA y cómo trabajar con clínicas."],["Semana 3","Evaluación y certificado","Caso práctico calificado y certificado con ID verificable."]],
+dKick:"La herramienta",dTitle:"Ampli Desk, gratis para alumnos y clínicas piloto.",dLead:"El mismo software que usan nuestros operadores. Funciona en el navegador, sin servidor: los datos no salen de tu computadora.",
+feat:["Explica 22 códigos de rechazo en 4 idiomas","Calcula el plazo de apelación por tipo de plan","Arma la carta en inglés y el prompt para Claude o ChatGPT","No deja guardar sin el checklist humano completo","Bandeja con monto recuperado, tasa de éxito y reporte de auditoría"],
+dCta:"Probar Ampli Desk",tagAppeal:"Apelar",mCode:"Faltó la autorización previa.",mck1:"Datos coinciden con la EOB",mck2:"Cada afirmación tiene prueba",mck3:"Plazo vigente",
+prKick:"Precios",prTitle:"Empieza por donde puedas.",
+prices:[{who:"Para empezar solo",t:"Kit de Apelaciones IA",a:"$29",u:"pago único",l:["22 plantillas de carta","Prompts verificados","Checklist imprimible"],c:"Comprar el kit",k:"kit"},{who:"Para aprender el oficio",t:"Cohorte fundadora",a:"$79",u:"luego $149",l:["6 sesiones en vivo","Ampli Desk incluido","Certificado verificable","Comunidad de operadores"],c:"Reservar mi cupo",k:"cohort",hl:"Precio fundador"},{who:"Para clínicas",t:"Piloto de recuperación",a:"$199",u:"pago único",l:["Revisamos hasta 20 reclamos negados","Reporte de auditoría por código","Cartas listas para enviar"],c:"Pedir el piloto",k:"pilot"},{who:"Para clínicas",t:"Operador gestionado",a:"$600",u:"/ mes",l:["Operador certificado part-time","Supervisión y control de calidad","Reporte mensual de recuperación"],c:"Hablar con nosotros",k:"talk"}],
+prNote:"Precios en USD. Pago seguro con Polar (tarjetas internacionales). Hay becas parciales por país: escríbenos.",
+fKick:"Quién está detrás",fQuote:"“El muro nunca fue la capacidad. Fue la credencial.”",fLead:"Michell Anyosa fundó Ampli para que el talento bilingüe de nuestra región haga trabajo experto con IA, con un método que un especialista en billing médico valida en cada cohorte.",
+aKick:"Postula",aTitle:"Dos puertas de entrada.",ftTitle:"Quiero aprender el oficio",ftHint:"Te escribimos en 24 horas con el temario y una prueba corta de inglés.",lName:"Nombre",lEmail:"Correo",lCountry:"País",lEng:"Nivel de inglés",lJob:"¿A qué te dedicas hoy?",consent:"Acepto que Ampli use mis datos para contactarme sobre la cohorte. Puedo darme de baja cuando quiera.",send:"Enviar postulación",okTalent:"¡Listo! Revisa tu correo en las próximas 24 horas.",
+fcTitle:"Tengo reclamos negados",fcHint:"For US practices and billing companies. We reply within one business day.",lNameC:"Your name",lEmailC:"Work email",lPractice:"Practice",lState:"State",lDen:"Denied claims per month (approx.)",consentC:"I agree to be contacted about the pilot. No patient data is requested in this form.",sendC:"Request the pilot",okClinic:"Thank you. We’ll reply within one business day.",
+faq:[["¿Necesito experiencia en salud?","No. Necesitas inglés intermedio-alto (B2), atención al detalle y unas 6 horas por semana."],["¿Me consiguen trabajo?","No prometemos empleo ni ingresos. Te damos el oficio, la herramienta y el certificado, y presentamos a los mejores egresados a las clínicas con las que trabajamos."],["¿La IA no hace esto sola?","No. La IA redacta, pero se equivoca con códigos, fechas y pruebas. El valor está en la persona que verifica, y eso es lo que certificamos."],["¿Cómo funciona el certificado?","Cada certificado tiene un ID único que cualquier empresa puede verificar en línea."],["¿En qué idiomas está?","La cohorte fundadora es en español. Le siguen turmas en portugués y en francés. Las cartas siempre se escriben en inglés."],["¿Y si no puedo pagar ahora?","Empieza con el kit de $29 o pide una beca parcial por país."],["¿Dónde quedan mis datos?","Los formularios y las cuentas se guardan en una base de datos protegida (Supabase) a la que solo accede el equipo de Ampli. En Ampli Desk, los reclamos se guardan solo en tu navegador: no viajan a nuestros servidores. Detalle en la Política de privacidad."],["¿Cómo usan la IA?","La IA redacta borradores; una persona entrenada verifica cada dato con un checklist de 8 puntos antes de enviar. Nunca subimos datos de pacientes a herramientas de IA. Detalle en la Política de uso de IA."]],
+endTitle:"Sube el primer peldaño.",endLead:"Diez cupos fundadores. Cuando se llenen, el precio pasa a $149.",
+fTag:"Formamos operadores aumentados con IA.",fContact:"Contacto",terms:"Términos",privacy:"Privacidad",theme:"Cambiar tema",
+legal:"Ampli es una marca de Limly LLC (Delaware, EE.UU.). Es un programa educativo y de servicios. No es una certificación oficial de AAPC ni de AHIMA, y no garantiza empleo ni ingresos. En la formación solo se usan casos ficticios o anonimizados. © 2026 Limly LLC · Ampli.",
+mailSubjectT:"Postulación cohorte Ampli",mailSubjectC:"Clinic pilot request",err:"Revisa los campos marcados."},
+en:{ctTitle:"Got another question?",ctHint:"Write to us and we’ll reply within 24 hours.",lMsg:"Your question",consentCt:"I agree that Ampli may use my data to answer my question, per the Privacy Policy.",sendCt:"Send question",okCt:"We got your question. We’ll reply within 24 hours.",mailSubjectCt:"Question from the Ampli website",errSave:"We couldn’t save your message. Email us directly at",aiLaw:"AI use & regulation",aiNote:"We use AI to draft, always with human review. We follow transparency and human-oversight principles aligned with the EU AI Act, GDPR, Brazil’s LGPD, Peru’s Law 29733 and US and Canadian privacy laws. We never put patient data into AI tools.",solveT:"What we solve: two problems that get solved together.",cliT:"For practices",talT:"For talent",
+cli:[["41%","of providers now have denial rates of 10% or more, and the share has risen every year since 2022."],["43%","of providers say they are understaffed to manage claims."],["Up to 65%","of denied claims are never resubmitted: earned money that is lost."],["$25","is the average cost for a practice to rework a denied claim."]],
+tal:[["$24.16/h","is the US median pay for a medical records specialist."],["14,200","openings a year are projected in that field through 2034."],["Months","of courses and certifications are the traditional way in."],["3 weeks","is the length of the Ampli path, with AI, guided practice and a verifiable certificate."]],
+brT:"Ampli connects both sides.",brP:"We train bilingual people in the craft of AI-assisted claim appeals, give them the tool (Ampli Desk) and verify their work. Practices recover money they already earned, at a fraction of the cost of hiring in the US. People gain an expert craft in 3 weeks.",
+src2:"Sources: Experian Health, State of Claims 2025; Change Healthcare, Denials Index 2020; MGMA; U.S. Bureau of Labor Statistics, May 2024.",nCraft:"The craft",nCohort:"Cohort",nDesk:"Ampli Desk",nPrice:"Pricing",apply:"Apply",
+h1a:"Credentials were the wall.",h1b:"AI is the ladder.",heroSub:"In three weeks, learn to appeal denied US medical claims with AI and a method an expert reviews. Specialist work, without the specialist degree.",
+ctaApply:"Apply to the cohort",ctaClinic:"I’m a practice",heroNote:"Founding cohort · {n} seats · Starts as soon as it fills",
+marq:["Bilingual","Detail-driven","Verified","Remote","Certified","AI-powered","Method-first","Human-checked"],
+pKick:"The problem",pTitle:"There’s money nobody goes after.",pLead:"US insurers deny a large share of claims, and almost nobody appeals. When someone does it with a method, many denials are overturned. The work takes patience, English and clear rules. It’s a perfect fit for a person trained with AI.",
+s1:"of in-network claims were denied by HealthCare.gov insurers in 2023.",s2:"of those denied claims were appealed.",s3:"of appeals overturned the denial.",src:"Source: KFF analysis of CMS data on HealthCare.gov plans, published January 2025.",
+cKick:"The craft",cTitle:"AI-assisted appeal operator.",cLead:"A concrete job with rules you can learn. AI drafts; you verify every line.",
+st1:"Read the denial",st1p:"Interpret the EOB and CARC code: what happened, whose error it is and whether it can be appealed.",st2:"Correct or appeal",st2p:"Choose the right action: corrected claim, appeal with evidence or send to another payer.",st3:"Verify and send",st3p:"Pass the 8-point human checklist and submit through the official channel before the deadline.",
+wKick:"The founding cohort",wTitle:"Three weeks. Six live sessions.",wLead:"Tuesdays and Thursdays, 8 p.m. New York time. Recorded in case you miss one.",
+week:[["Week 1","How US healthcare gets paid","Insurance, EOBs, CPT, ICD-10 and why claims get denied."],["Week 1","The 22 codes that matter","Practice with anonymized real cases in Ampli Desk."],["Week 2","AI with a method","Verified prompts, AI limits and how to catch errors."],["Week 2","The letter that wins","Structure, evidence and deadlines by payer type."],["Week 3","Privacy and HIPAA","What never goes into an AI and how to work with practices."],["Week 3","Assessment and certificate","Graded case study and a certificate with a verifiable ID."]],
+dKick:"The tool",dTitle:"Ampli Desk, free for students and pilot practices.",dLead:"The same software our operators use. It runs in the browser with no server: your data never leaves your computer.",
+feat:["Explains 22 denial codes in 4 languages","Calculates the appeal deadline by plan type","Drafts the letter and a prompt for Claude or ChatGPT","Won’t save until the human checklist is complete","Queue with recovered amount, win rate and audit report"],
+dCta:"Try Ampli Desk",tagAppeal:"Appeal",mCode:"Authorization absent.",mck1:"Data matches the EOB",mck2:"Every claim has evidence",mck3:"Deadline open",
+prKick:"Pricing",prTitle:"Start where you can.",
+prices:[{who:"Self-serve",t:"AI Appeals Kit",a:"$29",u:"one-time",l:["22 letter templates","Verified prompts","Printable checklist"],c:"Get the kit",k:"kit"},{who:"Learn the craft",t:"Founding cohort",a:"$79",u:"then $149",l:["6 live sessions","Ampli Desk included","Verifiable certificate","Operator community"],c:"Reserve my seat",k:"cohort",hl:"Founder price"},{who:"For practices",t:"Recovery pilot",a:"$199",u:"one-time",l:["We review up to 20 denied claims","Audit report by code","Letters ready to send"],c:"Request the pilot",k:"pilot"},{who:"For practices",t:"Managed operator",a:"$600",u:"/ month",l:["Part-time certified operator","Supervision and QA","Monthly recovery report"],c:"Talk to us",k:"talk"}],
+prNote:"Prices in USD. Secure checkout with Polar (international cards). Partial scholarships by country available: email us.",
+fKick:"Who’s behind it",fQuote:"“The wall was never ability. It was the credential.”",fLead:"Michell Anyosa founded Ampli so bilingual talent from our region can do expert work with AI, with a method a medical billing specialist validates every cohort.",
+aKick:"Apply",aTitle:"Two ways in.",ftTitle:"I want to learn the craft",ftHint:"We’ll email you within 24 hours with the syllabus and a short English test.",lName:"Name",lEmail:"Email",lCountry:"Country",lEng:"English level",lJob:"What do you do today?",consent:"I agree that Ampli may use my data to contact me about the cohort. I can unsubscribe anytime.",send:"Send application",okTalent:"Done! Check your inbox within 24 hours.",
+fcTitle:"I have denied claims",fcHint:"For US practices and billing companies. We reply within one business day.",lNameC:"Your name",lEmailC:"Work email",lPractice:"Practice",lState:"State",lDen:"Denied claims per month (approx.)",consentC:"I agree to be contacted about the pilot. No patient data is requested in this form.",sendC:"Request the pilot",okClinic:"Thank you. We’ll reply within one business day.",
+faq:[["Do I need healthcare experience?","No. You need upper-intermediate English (B2), attention to detail and about 6 hours a week."],["Will you get me a job?","We don’t promise jobs or income. You get the craft, the tool and the certificate, and we introduce top graduates to the practices we work with."],["Can’t AI just do this?","No. AI drafts, but it gets codes, dates and evidence wrong. The value is the person who verifies, and that’s what we certify."],["How does the certificate work?","Each certificate has a unique ID any company can verify online."],["Which languages?","The founding cohort is in Spanish, followed by Portuguese and French cohorts. Letters are always written in English."],["What if I can’t pay now?","Start with the $29 kit or ask for a partial country scholarship."],["Where is my data stored?","Forms and accounts live in a protected database (Supabase) only the Ampli team can access. In Ampli Desk, claims stay in your browser and never reach our servers. Details in the Privacy Policy."],["How do you use AI?","AI drafts; a trained person verifies every fact with an 8-point checklist before anything is sent. We never put patient data into AI tools. Details in the AI Use Policy."]],
+endTitle:"Take the first step.",endLead:"Ten founding seats. Once they fill, the price goes to $149.",
+fTag:"We train AI-augmented operators.",fContact:"Contact",terms:"Terms",privacy:"Privacy",theme:"Switch theme",
+legal:"Ampli is a brand of Limly LLC (Delaware, USA). It is an educational and services program. It is not an official AAPC or AHIMA certification and does not guarantee employment or income. Training uses only fictional or de-identified cases. © 2026 Limly LLC · Ampli.",
+mailSubjectT:"Ampli cohort application",mailSubjectC:"Clinic pilot request",err:"Please check the highlighted fields."},
+pt:{ctTitle:"Tem outra pergunta?",ctHint:"Escreva para nós e respondemos em até 24 horas.",lMsg:"Sua pergunta",consentCt:"Aceito que a Ampli use meus dados para responder minha pergunta, conforme a Política de privacidade.",sendCt:"Enviar pergunta",okCt:"Recebemos sua pergunta. Respondemos em até 24 horas.",mailSubjectCt:"Pergunta pelo site da Ampli",errSave:"Não conseguimos salvar sua mensagem. Escreva direto para",aiLaw:"Uso de IA e regulação",aiNote:"Usamos IA para redigir rascunhos, sempre com revisão humana. Seguimos princípios de transparência e supervisão humana alinhados ao Regulamento de IA da UE, ao RGPD, à LGPD, à Lei 29733 do Peru e às leis de privacidade dos EUA e do Canadá. Não colocamos dados de pacientes em ferramentas de IA.",solveT:"O que resolvemos: dois problemas que se resolvem juntos.",cliT:"Para a clínica",talT:"Para o talento",
+cli:[["41%","dos prestadores já têm taxas de negativa de 10% ou mais, e o número sobe todo ano desde 2022."],["43%","dos prestadores dizem que falta pessoal para gerir reembolsos."],["Até 65%","dos reembolsos negados nunca são reenviados: é dinheiro ganho que se perde."],["US$25","custa em média refazer um reembolso negado num consultório."]],
+tal:[["US$24,16/h","é a mediana paga nos EUA a um especialista em registros médicos."],["14.200","vagas por ano são projetadas nessa área até 2034."],["Meses","de cursos e certificações são o caminho tradicional para entrar."],["3 semanas","dura a trilha da Ampli, com IA, prática guiada e certificado verificável."]],
+brT:"A Ampli conecta as duas pontas.",brP:"Formamos pessoas bilíngues no ofício de recorrer de reembolsos com IA, damos a ferramenta (Ampli Desk) e verificamos o trabalho. A clínica recupera dinheiro que já ganhou, por uma fração do custo de contratar nos EUA. A pessoa ganha um ofício especializado em 3 semanas.",
+src2:"Fontes: Experian Health, State of Claims 2025; Change Healthcare, Denials Index 2020; MGMA; U.S. Bureau of Labor Statistics, maio de 2024.",nCraft:"O ofício",nCohort:"Turma",nDesk:"Ampli Desk",nPrice:"Preços",apply:"Inscreva-se",
+h1a:"O diploma era o muro.",h1b:"A IA é a escada.",heroSub:"Em três semanas você aprende a recorrer de reembolsos médicos negados nos EUA com IA e um método revisado por um especialista. Trabalho de especialista, sem diploma de especialista.",
+ctaApply:"Inscreva-se na turma",ctaClinic:"Sou uma clínica",heroNote:"Turma fundadora · {n} vagas · Começa assim que lotar",
+marq:["Bilíngue","Detalhista","Verificado","Remoto","Certificado","Com IA","Com método","Com critério"],
+pKick:"O problema",pTitle:"Tem dinheiro que ninguém vai buscar.",pLead:"As seguradoras dos EUA negam uma parte enorme dos reembolsos, e quase ninguém recorre. Quando alguém recorre com método, boa parte é revertida. O trabalho exige paciência, inglês e regras claras. É perfeito para uma pessoa treinada com IA.",
+s1:"dos reembolsos dentro da rede foram negados por seguradoras do HealthCare.gov em 2023.",s2:"desses reembolsos negados teve recurso.",s3:"dos recursos reverteram a negativa.",src:"Fonte: análise da KFF de dados do CMS sobre planos do HealthCare.gov, publicada em janeiro de 2025.",
+cKick:"O ofício",cTitle:"Operador de recursos com IA.",cLead:"Um trabalho concreto, com regras que se aprendem. A IA faz o rascunho; você verifica cada linha.",
+st1:"Ler a negativa",st1p:"Você interpreta a EOB e o código CARC: o que aconteceu, de quem é o erro e se cabe recurso.",st2:"Corrigir ou recorrer",st2p:"Você escolhe a ação certa: reembolso corrigido, recurso com provas ou envio a outro pagador.",st3:"Verificar e enviar",st3p:"Você passa pelo checklist humano de 8 pontos e envia pelo canal oficial dentro do prazo.",
+wKick:"A turma fundadora",wTitle:"Três semanas. Seis aulas ao vivo.",wLead:"Terças e quintas, 22h de Brasília. Gravadas, caso você não possa ir.",
+week:[["Semana 1","Como a saúde é paga nos EUA","Seguros, EOB, CPT, CID-10 e por que os reembolsos são negados."],["Semana 1","Os 22 códigos que importam","Prática com casos reais anonimizados no Ampli Desk."],["Semana 2","IA com método","Prompts verificados, limites da IA e como pegar erros."],["Semana 2","A carta que ganha","Estrutura, provas e prazos por tipo de pagador."],["Semana 3","Privacidade e HIPAA","O que nunca colocar numa IA e como trabalhar com clínicas."],["Semana 3","Avaliação e certificado","Estudo de caso avaliado e certificado com ID verificável."]],
+dKick:"A ferramenta",dTitle:"Ampli Desk, grátis para alunos e clínicas piloto.",dLead:"O mesmo software que nossos operadores usam. Roda no navegador, sem servidor: seus dados não saem do seu computador.",
+feat:["Explica 22 códigos de negativa em 4 idiomas","Calcula o prazo de recurso por tipo de plano","Monta a carta e o prompt para Claude ou ChatGPT","Não salva sem o checklist humano completo","Fila com valor recuperado, taxa de sucesso e relatório de auditoria"],
+dCta:"Testar o Ampli Desk",tagAppeal:"Recorrer",mCode:"Faltou autorização prévia.",mck1:"Dados batem com a EOB",mck2:"Cada afirmação tem prova",mck3:"Prazo vigente",
+prKick:"Preços",prTitle:"Comece por onde puder.",
+prices:[{who:"Para começar sozinho",t:"Kit de Recursos IA",a:"$29",u:"pagamento único",l:["22 modelos de carta","Prompts verificados","Checklist para imprimir"],c:"Comprar o kit",k:"kit"},{who:"Para aprender o ofício",t:"Turma fundadora",a:"$79",u:"depois $149",l:["6 aulas ao vivo","Ampli Desk incluído","Certificado verificável","Comunidade de operadores"],c:"Reservar minha vaga",k:"cohort",hl:"Preço fundador"},{who:"Para clínicas",t:"Piloto de recuperação",a:"$199",u:"pagamento único",l:["Revisamos até 20 reembolsos negados","Relatório de auditoria por código","Cartas prontas para enviar"],c:"Pedir o piloto",k:"pilot"},{who:"Para clínicas",t:"Operador gerenciado",a:"$600",u:"/ mês",l:["Operador certificado meio período","Supervisão e controle de qualidade","Relatório mensal de recuperação"],c:"Falar com a gente",k:"talk"}],
+prNote:"Preços em USD. Pagamento seguro com Polar (cartões internacionais). Há bolsas parciais por país: fale com a gente.",
+fKick:"Quem está por trás",fQuote:"“O muro nunca foi a capacidade. Foi o diploma.”",fLead:"Michell Anyosa fundou a Ampli para que o talento bilíngue da nossa região faça trabalho especializado com IA, com um método validado por um especialista em faturamento médico a cada turma.",
+aKick:"Inscreva-se",aTitle:"Duas portas de entrada.",ftTitle:"Quero aprender o ofício",ftHint:"Escrevemos em até 24 horas com o programa e um teste curto de inglês.",lName:"Nome",lEmail:"E-mail",lCountry:"País",lEng:"Nível de inglês",lJob:"O que você faz hoje?",consent:"Aceito que a Ampli use meus dados para me contatar sobre a turma. Posso cancelar quando quiser.",send:"Enviar inscrição",okTalent:"Pronto! Confira seu e-mail nas próximas 24 horas.",
+fcTitle:"Tenho reembolsos negados",fcHint:"For US practices and billing companies. We reply within one business day.",lNameC:"Your name",lEmailC:"Work email",lPractice:"Practice",lState:"State",lDen:"Denied claims per month (approx.)",consentC:"I agree to be contacted about the pilot. No patient data is requested in this form.",sendC:"Request the pilot",okClinic:"Thank you. We’ll reply within one business day.",
+faq:[["Preciso de experiência em saúde?","Não. Você precisa de inglês intermediário-avançado (B2), atenção aos detalhes e cerca de 6 horas por semana."],["Vocês me arrumam emprego?","Não prometemos emprego nem renda. Você recebe o ofício, a ferramenta e o certificado, e apresentamos os melhores formandos às clínicas parceiras."],["A IA não faz isso sozinha?","Não. A IA redige, mas erra códigos, datas e provas. O valor está na pessoa que verifica, e é isso que certificamos."],["Como funciona o certificado?","Cada certificado tem um ID único que qualquer empresa pode verificar online."],["Em quais idiomas?","A turma fundadora é em espanhol; em seguida vêm turmas em português e francês. As cartas são sempre em inglês."],["E se eu não puder pagar agora?","Comece pelo kit de $29 ou peça uma bolsa parcial por país."],["Onde ficam meus dados?","Formulários e contas ficam num banco de dados protegido (Supabase) que só a equipe da Ampli acessa. No Ampli Desk, os reembolsos ficam só no seu navegador e não vão para nossos servidores. Detalhes na Política de privacidade."],["Como vocês usam IA?","A IA redige rascunhos; uma pessoa treinada confere cada dado com um checklist de 8 pontos antes do envio. Nunca colocamos dados de pacientes em ferramentas de IA. Detalhes na Política de uso de IA."]],
+endTitle:"Suba o primeiro degrau.",endLead:"Dez vagas fundadoras. Quando lotarem, o preço passa a $149.",
+fTag:"Formamos operadores aumentados com IA.",fContact:"Contato",terms:"Termos",privacy:"Privacidade",theme:"Mudar tema",
+legal:"A Ampli é uma marca da Limly LLC (Delaware, EUA). É um programa educacional e de serviços. Não é uma certificação oficial da AAPC nem da AHIMA, e não garante emprego nem renda. A formação usa apenas casos fictícios ou anonimizados. © 2026 Limly LLC · Ampli.",
+mailSubjectT:"Inscrição turma Ampli",mailSubjectC:"Clinic pilot request",err:"Revise os campos marcados."},
+fr:{ctTitle:"Une autre question ?",ctHint:"Écrivez-nous, nous répondons sous 24 heures.",lMsg:"Votre question",consentCt:"J’accepte qu’Ampli utilise mes données pour répondre à ma question, selon la Politique de confidentialité.",sendCt:"Envoyer la question",okCt:"Nous avons reçu votre question. Réponse sous 24 heures.",mailSubjectCt:"Question depuis le site Ampli",errSave:"Impossible d’enregistrer votre message. Écrivez-nous directement à",aiLaw:"Usage de l’IA et réglementation",aiNote:"Nous utilisons l’IA pour rédiger des brouillons, toujours avec relecture humaine. Nous suivons des principes de transparence et de supervision humaine alignés sur le règlement européen sur l’IA, le RGPD, la LGPD brésilienne, la loi 29733 du Pérou et les lois de confidentialité des États-Unis et du Canada. Nous ne mettons jamais de données de patients dans des outils d’IA.",solveT:"Ce que nous résolvons : deux problèmes qui se résolvent ensemble.",cliT:"Pour la clinique",talT:"Pour les talents",
+cli:[["41 %","des prestataires ont un taux de refus de 10 % ou plus, en hausse chaque année depuis 2022."],["43 %","des prestataires manquent de personnel pour gérer les demandes."],["Jusqu’à 65 %","des refus ne sont jamais renvoyés : de l’argent gagné qui est perdu."],["25 $","coûte en moyenne le retraitement d’un refus dans un cabinet."]],
+tal:[["24,16 $/h","est le salaire médian d’un spécialiste des dossiers médicaux aux États-Unis."],["14 200","postes par an sont prévus dans ce métier jusqu’en 2034."],["Des mois","de cours et de certifications : c’est la voie classique."],["3 semaines","c’est la durée du parcours Ampli, avec IA, pratique encadrée et certificat vérifiable."]],
+brT:"Ampli relie les deux côtés.",brP:"Nous formons des personnes bilingues au métier du recours assisté par IA, leur donnons l’outil (Ampli Desk) et vérifions leur travail. La clinique récupère l’argent déjà gagné, pour une fraction du coût d’une embauche aux États-Unis. La personne acquiert un métier expert en 3 semaines.",
+src2:"Sources : Experian Health, State of Claims 2025 ; Change Healthcare, Denials Index 2020 ; MGMA ; U.S. Bureau of Labor Statistics, mai 2024.",nCraft:"Le métier",nCohort:"Promotion",nDesk:"Ampli Desk",nPrice:"Tarifs",apply:"Postulez",
+h1a:"Le diplôme était le mur.",h1b:"L’IA est l’échelle.",heroSub:"En trois semaines, apprenez à contester des demandes de remboursement médical refusées aux États-Unis, avec l’IA et une méthode vérifiée par un expert. Un travail de spécialiste, sans diplôme de spécialiste.",
+ctaApply:"Postulez à la promotion",ctaClinic:"Je suis une clinique",heroNote:"Promotion fondatrice · {n} places · Démarre dès qu’elle est complète",
+marq:["Bilingue","Minutieux","Vérifié","À distance","Certifié","Avec l’IA","Avec méthode","Avec jugement"],
+pKick:"Le problème",pTitle:"Il y a de l’argent que personne ne va chercher.",pLead:"Les assureurs américains refusent une grande part des demandes, et presque personne ne conteste. Quand quelqu’un le fait avec méthode, beaucoup de refus sont annulés. Ce travail demande de la patience, de l’anglais et des règles claires : idéal pour une personne formée avec l’IA.",
+s1:"des demandes en réseau ont été refusées par les assureurs de HealthCare.gov en 2023.",s2:"de ces refus ont fait l’objet d’un recours.",s3:"des recours ont annulé le refus.",src:"Source : analyse de KFF des données du CMS sur les plans HealthCare.gov, publiée en janvier 2025.",
+cKick:"Le métier",cTitle:"Opérateur de recours assisté par IA.",cLead:"Un travail concret, avec des règles qui s’apprennent. L’IA rédige ; vous vérifiez chaque ligne.",
+st1:"Lire le refus",st1p:"Vous interprétez l’EOB et le code CARC : ce qui s’est passé, qui a fait l’erreur et si un recours est possible.",st2:"Corriger ou contester",st2p:"Vous choisissez la bonne action : demande corrigée, recours avec preuves ou envoi à un autre payeur.",st3:"Vérifier et envoyer",st3p:"Vous validez la checklist humaine en 8 points et envoyez par le canal officiel avant l’échéance.",
+wKick:"La promotion fondatrice",wTitle:"Trois semaines. Six sessions en direct.",wLead:"Mardi et jeudi, 20 h heure de New York / Montréal. Enregistrées si vous les manquez.",
+week:[["Semaine 1","Comment la santé est payée aux États-Unis","Assurances, EOB, CPT, CIM-10 et pourquoi les demandes sont refusées."],["Semaine 1","Les 22 codes qui comptent","Pratique sur des cas réels anonymisés dans Ampli Desk."],["Semaine 2","L’IA avec méthode","Prompts vérifiés, limites de l’IA et détection des erreurs."],["Semaine 2","La lettre qui gagne","Structure, preuves et délais par type de payeur."],["Semaine 3","Confidentialité et HIPAA","Ce qu’on ne confie jamais à une IA et comment travailler avec les cliniques."],["Semaine 3","Évaluation et certificat","Étude de cas notée et certificat avec ID vérifiable."]],
+dKick:"L’outil",dTitle:"Ampli Desk, gratuit pour les élèves et les cliniques pilotes.",dLead:"Le même logiciel que nos opérateurs. Il fonctionne dans le navigateur, sans serveur : vos données ne quittent pas votre ordinateur.",
+feat:["Explique 22 codes de refus en 4 langues","Calcule le délai de recours selon le plan","Rédige la lettre et un prompt pour Claude ou ChatGPT","N’enregistre rien sans la checklist humaine complète","File avec montant récupéré, taux de succès et rapport d’audit"],
+dCta:"Essayer Ampli Desk",tagAppeal:"Recours",mCode:"Autorisation préalable absente.",mck1:"Données conformes à l’EOB",mck2:"Chaque affirmation est prouvée",mck3:"Délai ouvert",
+prKick:"Tarifs",prTitle:"Commencez là où vous pouvez.",
+prices:[{who:"En autonomie",t:"Kit de recours IA",a:"$29",u:"paiement unique",l:["22 modèles de lettre","Prompts vérifiés","Checklist imprimable"],c:"Acheter le kit",k:"kit"},{who:"Apprendre le métier",t:"Promotion fondatrice",a:"$79",u:"puis $149",l:["6 sessions en direct","Ampli Desk inclus","Certificat vérifiable","Communauté d’opérateurs"],c:"Réserver ma place",k:"cohort",hl:"Prix fondateur"},{who:"Pour les cliniques",t:"Pilote de récupération",a:"$199",u:"paiement unique",l:["Nous analysons jusqu’à 20 refus","Rapport d’audit par code","Lettres prêtes à envoyer"],c:"Demander le pilote",k:"pilot"},{who:"Pour les cliniques",t:"Opérateur géré",a:"$600",u:"/ mois",l:["Opérateur certifié à temps partiel","Supervision et contrôle qualité","Rapport mensuel de récupération"],c:"Nous parler",k:"talk"}],
+prNote:"Prix en USD. Paiement sécurisé avec Polar (cartes internationales). Bourses partielles par pays : écrivez-nous.",
+fKick:"Qui est derrière",fQuote:"« Le mur n’a jamais été la capacité. C’était le diplôme. »",fLead:"Michell Anyosa a fondé Ampli pour que les talents bilingues fassent un travail d’expert avec l’IA, selon une méthode validée par un spécialiste de la facturation médicale à chaque promotion.",
+aKick:"Postulez",aTitle:"Deux portes d’entrée.",ftTitle:"Je veux apprendre le métier",ftHint:"Nous vous écrivons sous 24 heures avec le programme et un court test d’anglais.",lName:"Nom",lEmail:"E-mail",lCountry:"Pays",lEng:"Niveau d’anglais",lJob:"Que faites-vous aujourd’hui ?",consent:"J’accepte qu’Ampli utilise mes données pour me contacter au sujet de la promotion. Désinscription possible à tout moment.",send:"Envoyer ma candidature",okTalent:"C’est fait ! Surveillez votre boîte mail dans les 24 heures.",
+fcTitle:"J’ai des demandes refusées",fcHint:"For US practices and billing companies. We reply within one business day.",lNameC:"Your name",lEmailC:"Work email",lPractice:"Practice",lState:"State",lDen:"Denied claims per month (approx.)",consentC:"I agree to be contacted about the pilot. No patient data is requested in this form.",sendC:"Request the pilot",okClinic:"Thank you. We’ll reply within one business day.",
+faq:[["Faut-il une expérience en santé ?","Non. Il faut un anglais intermédiaire avancé (B2), le sens du détail et environ 6 heures par semaine."],["Vous me trouvez un emploi ?","Nous ne promettons ni emploi ni revenu. Vous recevez le métier, l’outil et le certificat, et nous présentons les meilleurs diplômés aux cliniques partenaires."],["L’IA ne peut pas le faire seule ?","Non. L’IA rédige, mais se trompe sur les codes, les dates et les preuves. La valeur, c’est la personne qui vérifie, et c’est ce que nous certifions."],["Comment fonctionne le certificat ?","Chaque certificat a un ID unique vérifiable en ligne par n’importe quelle entreprise."],["Dans quelles langues ?","La promotion fondatrice est en espagnol, puis viennent des promotions en portugais et en français. Les lettres sont toujours rédigées en anglais."],["Et si je ne peux pas payer maintenant ?","Commencez par le kit à 29 $ ou demandez une bourse partielle selon votre pays."],["Où sont stockées mes données ?","Formulaires et comptes sont stockés dans une base protégée (Supabase) accessible uniquement à l’équipe Ampli. Dans Ampli Desk, les demandes restent dans votre navigateur et n’arrivent jamais sur nos serveurs. Détails dans la Politique de confidentialité."],["Comment utilisez-vous l’IA ?","L’IA rédige des brouillons ; une personne formée vérifie chaque donnée avec une checklist en 8 points avant tout envoi. Nous ne mettons jamais de données de patients dans des outils d’IA. Détails dans la Politique d’usage de l’IA."]],
+endTitle:"Montez la première marche.",endLead:"Dix places fondatrices. Ensuite, le prix passe à 149 $.",
+fTag:"Nous formons des opérateurs augmentés par l’IA.",fContact:"Contact",terms:"Conditions",privacy:"Confidentialité",theme:"Changer de thème",
+legal:"Ampli est une marque de Limly LLC (Delaware, États-Unis). C’est un programme de formation et de services. Ce n’est pas une certification officielle AAPC ou AHIMA et il ne garantit ni emploi ni revenu. La formation n’utilise que des cas fictifs ou anonymisés. © 2026 Limly LLC · Ampli.",
+mailSubjectT:"Candidature promotion Ampli",mailSubjectC:"Clinic pilot request",err:"Vérifiez les champs signalés."}
+};
+let lang=T[A.lang()]?A.lang():"es";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function render(){
+  const t=T[lang];document.documentElement.lang=lang;$("lang").value=lang;
+  document.querySelectorAll("[data-i]").forEach(e=>{const v=t[e.dataset.i];if(typeof v==="string")e.textContent=v.replace("{n}",(CFG.seatsLeft||10))});
+  const m=t.marq.map(w=>`<span>${esc(w)}</span>`).join("");$("marq").innerHTML=m+m;
+  $("week").innerHTML=t.week.map(w=>`<li><span class="w">${esc(w[0])}</span><h3>${esc(w[1])}</h3><p>${esc(w[2])}</p></li>`).join("");
+  const li=a=>a.map(x=>`<li><b>${esc(x[0])}</b>${esc(x[1])}</li>`).join("");$("cliL").innerHTML=li(t.cli);$("talL").innerHTML=li(t.tal);
+  $("feat").innerHTML=t.feat.map(f=>`<li>${esc(f)}</li>`).join("");
+  $("prices").innerHTML=t.prices.map(p=>{return `<div class="price${p.hl?" hl":""}">${p.hl?`<span class="badge">${esc(p.hl)}</span>`:""}<span class="who">${esc(p.who)}</span><h3>${esc(p.t)}</h3><div class="amt">${esc(p.a)} <small>${esc(p.u)}</small></div><ul>${p.l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${p.k==="talk"?`<a class="btn" href="#clinicas">${esc(p.c)}</a>`:`<button type="button" class="btn ${p.hl?"pri":""}" data-buy="${p.k}">${esc(p.c)}</button>`}</div>`}).join("");
+  $("faqs").innerHTML=t.faq.map(f=>`<details><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
+  acct();
+}
+function acct(){const u=A.user();$("acctBtn").textContent=(u||!A.enabled)?A.t("openDesk"):A.t("login");$("outBtn").hidden=!u;$("outBtn").textContent=A.t("logout")}
+$("acctBtn").onclick=()=>{if(A.user()||!A.enabled)location.href="app/";else A.openAuth("login")};
+$("outBtn").onclick=()=>A.signOut();
+A.onAuth(acct);A.ready.then(acct);
+$("prices").addEventListener("click",e=>{const b=e.target.closest("[data-buy]");if(b)A.buy(b.dataset.buy)});
+$("lang").onchange=e=>{lang=e.target.value;A.setLang(lang);render()};
+function handle(form,kind,subjectKey,okKey){
+  form.addEventListener("submit",async e=>{e.preventDefault();const t=T[lang];let bad=false;
+    form.querySelectorAll("[required]").forEach(i=>{const v=i.type==="checkbox"?i.checked:(i.type==="email"?/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(i.value.trim()):i.value.trim());i.style.borderColor=v?"":"#D7263D";i.setAttribute("aria-invalid",!v);if(!v)bad=true});
+    if(bad){(form.querySelector('[aria-invalid="true"]')||form).focus();return}
+    const data=Object.fromEntries(new FormData(form));delete data.consent;Object.keys(data).forEach(k=>data[k]=String(data[k]).trim());
+    const ok=form.querySelector(".ok"),btn=form.querySelector("button[type=submit]"),lbl=btn.textContent;
+    btn.disabled=true;btn.textContent=A.t("sending");ok.style.display="none";ok.style.background="";
+    const res=await A.saveLead(Object.assign({kind,consent:true},data));
+    btn.disabled=false;btn.textContent=lbl;
+    if(res.ok){ok.textContent=t[okKey];ok.style.display="block";form.reset();A.track("lead_sent",{kind})}
+    else if(res.via==="none"){location.href=A.mailtoLead(t[subjectKey],data);ok.textContent=t[okKey];ok.style.display="block"}
+    else{ok.style.display="block";ok.style.background="#D7263D";ok.innerHTML=esc(t.errSave)+' <a style="color:#fff" href="'+A.mailtoLead(t[subjectKey],data)+'">'+esc(CFG.contactEmail||"")+'</a>'}
+  });
+}
+handle($("fTalent"),"talent","mailSubjectT","okTalent");handle($("clinicas"),"clinic","mailSubjectC","okClinic");handle($("fContact"),"contact","mailSubjectCt","okCt");
+
+const root=document.documentElement;
+$("themeBtn").onclick=()=>{const d=root.dataset.theme==="dark"||(!root.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);root.dataset.theme=d?"light":"dark"};
+render();
+</script>
+</body>
+</html>
